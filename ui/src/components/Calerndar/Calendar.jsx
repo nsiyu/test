@@ -2,28 +2,9 @@ import React, { useState } from "react";
 import { ChakraProvider, extendTheme, Box, Button, useColorModeValue } from "@chakra-ui/react";
 import Schedule from "./Schedule.jsx";
 import TaskList from "./TaskList";
+import theme from "../../theme.js";
 
-const theme = extendTheme({
-  colors: {
-    bgLight: 'gray.50',
-    buttonActive: 'blue.500',
-    buttonInactive: 'gray.200'
-  },
-  components: {
-    Button: {
-      variants: {
-        active: {
-          bg: 'blue.500',
-          color: 'white'
-        },
-        inactive: {
-          bg: 'gray.200',
-          color: 'gray.800'
-        }
-      }
-    }
-  }
-});
+
 
 export default function Calendar() {
   const [currentView, setCurrentView] = useState("Schedule");

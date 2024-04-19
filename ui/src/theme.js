@@ -3,22 +3,22 @@ import { extendTheme } from "@chakra-ui/react";
 const theme = extendTheme({
   colors: {
     brand: {
-      50: "#f5f7fa", // Light background
-      100: "#e4e7eb", // Light shade
-      200: "#cbd2d9", // Light grey
-      300: "#9aa5b1", // Grey for text
-      400: "#7b8794", // Dark grey for active elements
-      500: "#616e7c", // Darker grey
-      600: "#52606d", // Subdued elements
-      700: "#3e4c59", // Important components (buttons, icons)
-      800: "#323f4b", // Hover states
-      900: "#1f2933", // Solid text
+      50: "#f5f7fa",
+      100: "#e4e7eb",
+      200: "#cbd2d9",
+      300: "#9aa5b1",
+      400: "#7b8794",
+      500: "#616e7c",
+      600: "#52606d",
+      700: "#3e4c59",
+      800: "#323f4b",
+      900: "#1f2933",
     },
     accent: {
-      100: "#ffc7c7", // Light pink for backgrounds
-      200: "#ff8a8a", // Vibrant pink for interactive elements
-      300: "#ff4c4c", // Strong red for calls to action
-      400: "#c33c3c", // Dark red for hover states
+      100: "#ffc7c7",
+      200: "#ff8a8a",
+      300: "#ff4c4c",
+      400: "#c33c3c",
     },
   },
   components: {
@@ -28,8 +28,8 @@ const theme = extendTheme({
         borderRadius: "lg",
       },
       variants: {
-        solid: (props) => ({
-          bg: props.colorMode === "dark" ? "brand.700" : "accent.200",
+        solid: {
+          bg: "accent.200",
           color: "white",
           _hover: {
             bgGradient: "linear(to-r, accent.200, accent.300)",
@@ -38,15 +38,15 @@ const theme = extendTheme({
           _active: {
             bgGradient: "linear(to-r, accent.300, accent.400)",
           },
-        }),
+        },
       },
     },
     Badge: {
       variants: {
-        solid: (props) => ({
-          bg: props.colorMode === "dark" ? "brand.700" : "accent.300",
+        solid: {
+          bg: "accent.300",
           color: "white",
-        }),
+        },
       },
     },
   },
