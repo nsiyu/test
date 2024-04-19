@@ -13,16 +13,36 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineCloudUpload, AiOutlineBulb } from "react-icons/ai";
 import LearningEventsList from "./LearningEventList";
+import Upload from "./Upload";
 const HomePage = () => {
   const theme = useTheme();
 
   const handleUploadClick = () => {};
   const handleLearnClick = () => {};
 
+  const handleFileUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    setFile(uploadedFile);
+    setIsProcessed(false);
+    setScannedResult("Scanned successfully!");
+  };
+
+  const handleProcessing = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setIsProcessed(true);
+    }, 2000);
+  };
+
+  const handleContinue = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <Box bg={theme.colors.brand[50]} minH="100vh" p={10}>
+      <Upload></Upload>
       <VStack spacing={8} justifyContent="center" alignItems="center">
-
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} width="100%">
           <Flex
             direction="column"

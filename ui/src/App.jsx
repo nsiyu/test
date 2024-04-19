@@ -7,6 +7,9 @@ import LoginPage from "./components/Login";
 import HomePage from "./components/HomePage";
 import LearningEventsList from "./components/LearningEventList";
 import theme from "./theme.js";
+import Calendar from "./components/Calerndar/Calendar.jsx";
+import StudyPlan from "./components/StudyPlan.jsx";
+import Quiz from "./components/Quiz.jsx";
 
 function App() {
   return (
@@ -14,6 +17,8 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/studyplan" element={<StudyPlan />} />
           <Route path="/" element={<WithNavbar />}>
             <Route index element={<HomePage />} />]{" "}
           </Route>
