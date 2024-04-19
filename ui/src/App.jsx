@@ -18,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/quiz" element={<Quiz />} />
           <Route path="/studyplan" element={<StudyPlan />} />
           <Route path="/" element={<WithNavbar />}>
             <Route index element={<HomePage />} />]{" "}

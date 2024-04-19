@@ -41,7 +41,6 @@ const HomePage = () => {
 
   return (
     <Box bg={theme.colors.brand[50]} minH="100vh" p={10}>
-      <Upload></Upload>
       <VStack spacing={8} justifyContent="center" alignItems="center">
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} width="100%">
           <Flex
@@ -69,9 +68,7 @@ const HomePage = () => {
               Upload Syllabus
             </Text>
             <Text my={2}>Get your personalized learning path</Text>
-            <Button colorScheme="blue" variant="solid">
-              Upload Now
-            </Button>
+            <Upload />
           </Flex>
 
           {/* Learn a Concept Box */}
