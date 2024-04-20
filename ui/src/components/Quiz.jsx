@@ -2,7 +2,6 @@ import React from "react";
 import {
   ChakraProvider,
   extendTheme,
-  ColorModeProvider,
   Container,
   VStack,
   Box,
@@ -35,12 +34,45 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "gray.100", // Set a global background color for the light theme
-        color: "black", // Ensure text is optimally readable
+        bg: "gray.100",
+        color: "black",
       },
     },
   },
 });
+
+// QuizButton component
+const QuizButton = ({
+  questionId,
+  option,
+  isCorrect,
+  isSelected,
+  handleOptionChange,
+}) => {
+  let colorScheme = "gray"; // default color
+  if (isSelected) {
+    colorScheme = isCorrect ? "green" : "red";
+  }
+
+  const icon = isSelected ? isCorrect ? <CheckIcon /> : <CloseIcon /> : null;
+  const displayText = isSelected
+    ? isCorrect
+      ? "Correct!"
+      : "Incorrect!"
+    : option;
+
+  return (
+    <Button
+      onClick={() => handleOptionChange(questionId, option)}
+      colorScheme={colorScheme}
+      variant="solid"
+      leftIcon={icon}
+      width="100%"
+    >
+      {displayText}
+    </Button>
+  );
+};
 
 export default function Quiz() {
   const [answers, setAnswers] = React.useState({});
@@ -61,57 +93,42 @@ export default function Quiz() {
   };
 
   return (
-    <Container centerContent p={4}>
-      <VStack spacing={8}>
-        {questions.map((question) => (
-          <Box
-            key={question.id}
-            p={5}
-            shadow="md"
-            borderWidth="1px"
-            borderRadius="lg"
-            width="100%"
-            maxW="md"
-            bg="white"
-          >
-            <Text fontSize="2xl" fontWeight="bold">
-              {question.question}
-            </Text>
-            <VStack spacing={3}>
-              {question.options.map((option) => (
-                <Button
-                  key={option}
-                  onClick={() => handleOptionChange(question.id, option)}
-                  colorScheme={
-                    feedback[question.id] === "correct" &&
-                    answers[question.id] === option
-                      ? "green"
-                      : feedback[question.id] === "incorrect" &&
-                        answers[question.id] === option
-                      ? "red"
-                      : "blue"
-                  }
-                  variant={
-                    answers[question.id] === option ? "solid" : "outline"
-                  }
-                  leftIcon={
-                    feedback[question.id] === "correct" &&
-                    answers[question.id] === option ? (
-                      <CheckIcon />
-                    ) : feedback[question.id] === "incorrect" &&
-                      answers[question.id] === option ? (
-                      <CloseIcon />
-                    ) : null
-                  }
-                  width="100%"
-                >
-                  {option}
-                </Button>
-              ))}
-            </VStack>
-          </Box>
-        ))}
-      </VStack>
-    </Container>
+    <ChakraProvider theme={theme}>
+      <Container centerContent p={4}>
+        <VStack spacing={8}>
+          {questions.map((question) => (
+            <Box
+              key={question.id}
+              p={5}
+              shadow="md"
+              borderWidth="1px"
+              borderRadius="lg"
+              width="100%"
+              maxW="md"
+              bg="white"
+            >
+              <Text fontSize="2xl" fontWeight="bold">
+                {question.question}
+              </Text>
+              <VStack spacing={3}>
+                {question.options.map((option) => (
+                  <QuizButton
+                    key={option}
+                    questionId={question.id}
+                    option={option}
+                    isCorrect={
+                      feedback[question.id] === "correct" &&
+                      answers[question.id] === option
+                    }
+                    isSelected={answers[question.id] === option}
+                    handleOptionChange={handleOptionChange}
+                  />
+                ))}
+              </VStack>
+            </Box>
+          ))}
+        </VStack>
+      </Container>
+    </ChakraProvider>
   );
 }

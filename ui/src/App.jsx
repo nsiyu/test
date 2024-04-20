@@ -10,6 +10,7 @@ import theme from "./theme.js";
 import Calendar from "./components/Calerndar/Calendar.jsx";
 import StudyPlan from "./components/StudyPlan.jsx";
 import Quiz from "./components/Quiz.jsx";
+import EducationForm from "./components/PreferenceForm.jsx";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/quiz" element={<Quiz />} />
+          <Route path="/UserInfo" element={<EducationForm />} />
+
           <Route path="/studyplan" element={<StudyPlan />} />
           <Route path="/" element={<WithNavbar />}>
             <Route index element={<HomePage />} />]{" "}
