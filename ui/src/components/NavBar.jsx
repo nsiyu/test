@@ -11,6 +11,7 @@ import {
   MenuItem,
   useTheme,
   IconButton,
+  useColorMode,
 } from "@chakra-ui/react";
 import {
   FiLogIn,
@@ -46,7 +47,13 @@ const Navbar = () => {
       borderBottomColor={borderColor}
       zIndex="1000"
     >
-      <Box fontSize="xl" fontWeight="bold" letterSpacing="tight">
+      <Box
+        fontSize="xl"
+        fontWeight="bold"
+        letterSpacing="tight"
+        onClick={() => navigate("/")}
+        _hover={{ cursor: "pointer" }}
+      >
         Learn.ai
       </Box>
 
