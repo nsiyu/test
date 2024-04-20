@@ -44,9 +44,7 @@ function Flashcards() {
     <Container maxW="container.xl" p={4} centerContent>
       <VStack spacing={8}>
         <Heading as="h1" size="xl">Study Flashcards</Heading>
-        <Button onClick={() => setViewMode(viewMode === 'single' ? 'grid' : 'single')} colorScheme="blue">
-          Toggle View ({viewMode === 'single' ? 'Grid' : 'Single'})
-        </Button>
+
         {viewMode === 'single' ? (
           <VStack spacing={4}>
             <Flashcard card={flashcardsData[current]} />
