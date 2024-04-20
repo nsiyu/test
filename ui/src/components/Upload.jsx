@@ -25,11 +25,13 @@ const FileUploadButton = () => {
       .then((response) => response.json())
       .then((data) => {
         setExtractedText(data.text);
+        console.log(data.text);
       });
     setButtonState("loading");
     setTimeout(() => {
       setButtonState("continue");
     }, 1000);
+    console.log(extractedText);
   };
 
   const handleContinue = () => {
