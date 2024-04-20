@@ -50,9 +50,6 @@ const StudyPlan = () => {
     quiz: "Quiz Yourself",
     ai: "AI Tutor",
   };
-  const handleBackToCourse = () => {
-    navigate("/course");
-  };
 
   return (
     <VStack spacing={6} align="stretch" p={5}>
@@ -63,7 +60,9 @@ const StudyPlan = () => {
             cursor="pointer"
             color={theme.colors.primary} // Use the theme color for text
             _hover={{ color: "pink" }} // Use the theme color for hover
-            onClick={handleBackToCourse} // Adjust this to navigate back
+            onClick={() => {
+              navigate("/courses");
+            }}
           >
             &larr; Back to Courses
           </Text>

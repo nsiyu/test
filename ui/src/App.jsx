@@ -18,15 +18,15 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <AuthProvider>
-        <Navbar />
+        <Navbar></Navbar>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/UserInfo" element={<EducationForm />} />
-          <Route path="/Course" element={<LearningEventsList />} />
+          <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
-          <Route path="/" element={<WithNavbar />}>
+          <Route path="/" element={<ContentPage />}>
             <Route index element={<HomePage />} />
           </Route>
         </Routes>
@@ -35,17 +35,17 @@ function App() {
   );
 }
 
-function WithNavbar() {
-  return (
-    <>
-      <Navbar />
-      <Box pt="8rem">
-        <Routes>
-          <Route index element={<ContentPage/>} />
-        </Routes>
-      </Box>
-    </>
-  );
-}
+// function WithNavbar() {
+//   return (
+//     <>
+//       <Navbar />
+//       <Box pt="8rem">
+//         <Routes>
+//           <Route index element={<ContentPage />} />
+//         </Routes>
+//       </Box>
+//     </>
+//   );
+//}
 
 export default App;

@@ -3,19 +3,26 @@ import {
   Flex,
   Box,
   Button,
-  useTheme,
   Icon,
   Text,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  Avatar,
+  useTheme,
   IconButton,
 } from "@chakra-ui/react";
-import { FiLogIn, FiLogOut, FiCalendar, FiZap, FiUser } from "react-icons/fi";
+import {
+  FiLogIn,
+  FiLogOut,
+  FiCalendar,
+  FiZap,
+  FiUser,
+  FiBookOpen,
+} from "react-icons/fi"; // Import FiBookOpen icon
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
+
 const Navbar = () => {
   const theme = useTheme();
   const { isAuthenticated, logout, user } = useContext(AuthContext);
@@ -37,7 +44,7 @@ const Navbar = () => {
       bg={bg}
       borderBottomWidth="1px"
       borderBottomColor={borderColor}
-      zIndex="1000" // Ensure it stays on top of other content
+      zIndex="1000"
     >
       <Box fontSize="xl" fontWeight="bold" letterSpacing="tight">
         Learn.ai
@@ -64,6 +71,14 @@ const Navbar = () => {
               _hover={{ bg: buttonHoverBg }}
             >
               Calendar
+            </Button>
+            <Button
+              leftIcon={<Icon as={FiBookOpen} color={iconColor} />}
+              variant="ghost"
+              onClick={() => navigate("/courses")}
+              _hover={{ bg: buttonHoverBg }}
+            >
+              My Courses
             </Button>
 
             {/* Profile Dropdown */}
