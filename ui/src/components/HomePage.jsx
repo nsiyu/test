@@ -102,7 +102,6 @@ const HomePage = () => {
             </Button>
           </Flex>
         </SimpleGrid>
-        <LearningEventsList />
       </VStack>
     </Box>
   );

@@ -14,6 +14,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 function EducationForm() {
   const [educationLevel, setEducationLevel] = useState("");
@@ -21,11 +22,12 @@ function EducationForm() {
   const [studyTime, setStudyTime] = useState("");
   const [studyMethod, setStudyMethod] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log({ educationLevel, completionTime, studyTime, studyMethod });
-    alert("Form submitted. Check the console for data.");
+    navigate("/studyplan");
   };
 
   const bgBoxColor = useColorModeValue("white", "gray.800");

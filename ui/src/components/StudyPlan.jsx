@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   VStack,
@@ -9,6 +9,7 @@ import {
   useColorMode,
   useColorModeValue,
   Tooltip,
+  useTheme, // Import useTheme to access the theme object
 } from "@chakra-ui/react";
 import {
   FaRobot,
@@ -17,9 +18,15 @@ import {
   FaMoon,
   FaSun,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthProvider";
 
 const StudyPlan = () => {
+  const { isAuthenticated, logout, user } = useContext(AuthContext);
   const { colorMode, toggleColorMode } = useColorMode();
+  const theme = useTheme(); // Use the theme object
+  console.log(isAuthenticated);
+  const navigate = useNavigate();
   const topics = [
     {
       id: 1,
@@ -33,38 +40,7 @@ const StudyPlan = () => {
       description: "Learn to style apps with Chakra UI.",
       finishTime: "10:50",
     },
-    {
-      id: 3,
-      name: "Redux for Beginners",
-      description: "Introduction to state management with Redux.",
-      finishTime: "7:30",
-    },
-    {
-      id: 4,
-      name: "Next.js Features",
-      description: "Explore the features of Next.js for server-rendered apps.",
-      finishTime: "12:45",
-    },
-    {
-      id: 5,
-      name: "TypeScript Essentials",
-      description:
-        "Learn the basics of TypeScript for strong typing in JavaScript.",
-      finishTime: "8:20",
-    },
-    {
-      id: 6,
-      name: "GraphQL Basics",
-      description: "Learn how to fetch data with GraphQL.",
-      finishTime: "9:15",
-    },
-    {
-      id: 7,
-      name: "Tailwind CSS",
-      description: "Design responsive interfaces quickly with Tailwind CSS.",
-      finishTime: "4:50",
-    },
-    // Add more topics as needed
+    // Additional topics...
   ];
 
   const [selectedMethod, setSelectedMethod] = useState("");
@@ -74,14 +50,24 @@ const StudyPlan = () => {
     quiz: "Quiz Yourself",
     ai: "AI Tutor",
   };
-
-  const handleMethodChange = (event) => setSelectedMethod(event.target.value);
-
-  const iconButtonBg = useColorModeValue("blue.500", "blue.200");
+  const handleBackToCourse = () => {
+    navigate("/course");
+  };
 
   return (
     <VStack spacing={6} align="stretch" p={5}>
       <HStack justifyContent="space-between">
+        {isAuthenticated && (
+          <Text
+            fontSize="lg"
+            cursor="pointer"
+            color={theme.colors.primary} // Use the theme color for text
+            _hover={{ color: "pink" }} // Use the theme color for hover
+            onClick={handleBackToCourse} // Adjust this to navigate back
+          >
+            &larr; Back to Courses
+          </Text>
+        )}
         <Heading as="h1" size="xl">
           Your Study Plan
         </Heading>
@@ -89,8 +75,8 @@ const StudyPlan = () => {
           icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
           aria-label="Toggle color mode"
           onClick={toggleColorMode}
-          bg={iconButtonBg}
-          _hover={{ bg: "blue.600" }}
+          bg={theme.colors.primary} // Use the theme color for button background
+          _hover={{ bg: theme.colors.primaryDark }} // Use theme color for hover
           size="lg"
         />
       </HStack>
@@ -127,8 +113,8 @@ const StudyPlan = () => {
                     )
                   }
                   aria-label={`${learningMethods[method]} for ${topic.name}`}
-                  bg={iconButtonBg}
-                  _hover={{ bg: "blue.600" }}
+                  bg={theme.colors.primary} // Use the theme color for button background
+                  _hover={{ bg: theme.colors.primaryDark }} // Use theme color for hover
                   onClick={() =>
                     console.log(
                       `${learningMethods[method]} clicked for topic:`,

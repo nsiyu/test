@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Button, Spinner, useToast, Box, Text, Center } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const FileUploadButton = () => {
   const [file, setFile] = useState(null);
   const [buttonState, setButtonState] = useState("upload"); // States: 'upload', 'submit', 'loading', 'continue'
   const toast = useToast();
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -25,24 +27,11 @@ const FileUploadButton = () => {
     setButtonState("loading");
     setTimeout(() => {
       setButtonState("continue");
-      toast({
-        title: "File processed",
-        description: "Your file has been successfully processed.",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
     }, 2000); // Simulate file processing time
   };
 
   const handleContinue = () => {
-    toast({
-      title: "Continue",
-      description: "You can now proceed.",
-      status: "info",
-      duration: 2000,
-      isClosable: true,
-    });
+    navigate('/userinfo')
   };
 
   return (

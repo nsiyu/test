@@ -10,21 +10,22 @@ import theme from "./theme.js";
 import Calendar from "./components/Calerndar/Calendar.jsx";
 import StudyPlan from "./components/StudyPlan.jsx";
 import Quiz from "./components/Quiz.jsx";
-import EducationForm from "./components/PreferenceForm.jsx";
+import EducationForm from "./components/EducationPreference.jsx";
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <AuthProvider>
+        <Navbar />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/UserInfo" element={<EducationForm />} />
-
+          <Route path="/Course" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
           <Route path="/" element={<WithNavbar />}>
-            <Route index element={<HomePage />} />]{" "}
+            <Route index element={<HomePage />} />
           </Route>
         </Routes>
       </AuthProvider>
@@ -37,7 +38,6 @@ function WithNavbar() {
     <>
       <Navbar />
       <Box pt="8rem">
-        {" "}
         <Routes>
           <Route index element={<HomePage />} />
         </Routes>

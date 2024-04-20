@@ -37,10 +37,6 @@ const Navbar = () => {
       bg={bg}
       borderBottomWidth="1px"
       borderBottomColor={borderColor}
-      position="fixed" // Make the navbar fixed
-      top="0" // Position at the top of the viewport
-      left="0" // Stretch across from the left
-      right="0" // Stretch across to the right
       zIndex="1000" // Ensure it stays on top of other content
     >
       <Box fontSize="xl" fontWeight="bold" letterSpacing="tight">
