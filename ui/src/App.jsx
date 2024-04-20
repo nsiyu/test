@@ -18,7 +18,7 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <AuthProvider>
-        <Navbar></Navbar>
+        <Navbar />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/calendar" element={<Calendar />} />

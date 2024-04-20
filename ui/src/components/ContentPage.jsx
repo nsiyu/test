@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -14,12 +14,53 @@ import {
   ListItem,
   ListIcon,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import { FaGoogleDrive, FaUpload } from "react-icons/fa";
 import { MdCheckCircle } from "react-icons/md";
 import Upload from "./Upload.jsx";
 
 function App() {
+  const [file, setFile] = useState(null);
+  const [extractedText, setExtractedText] = useState([]);
+  const toast = useToast();
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleFileUpload = async () => {
+    if (!file) {
+      toast({
+        title: "No file selected",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("http://localhost:3000/upload-pdf", {
+      method: "POST",
+      body: formData,
+      mode: "no-cors",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setExtractedText(data.text);
+        toast({
+          title: "File uploaded successfully",
+          description: "Text has been extracted from the PDF.",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+  };
+
   return (
     <Container maxW="container.xl" p={4}>
       <Flex direction="row" justify="space-between" align="start">
@@ -31,104 +72,41 @@ function App() {
             <VStack spacing={4}>
               <HStack w="full" alignItems="center" spacing={4}>
                 <Input
-                  placeholder="Paste your notes here"
+                  type="file"
+                  onChange={handleFileChange}
                   size="lg"
-                  flexGrow={1}
+                  placeholder="Upload PDF"
+                  accept="application/pdf"
                 />
-                <Button colorScheme="blue" leftIcon={<FaUpload />}>
-                  Upload
+                <Button
+                  colorScheme="blue"
+                  leftIcon={<FaUpload />}
+                  onClick={handleFileUpload}
+                >
+                  Upload PDF
                 </Button>
               </HStack>
-              <HStack spacing={4}>
-                <Upload></Upload>
-                <Button leftIcon={<FaGoogleDrive />} colorScheme="teal">
-                  Select Google Drive
-                </Button>
-              </HStack>
+              {/* Displaying the extracted text */}
+              {extractedText.length > 0 && (
+                <Box
+                  overflowY="auto"
+                  maxH="200px"
+                  p={4}
+                  mt={4}
+                  borderWidth="1px"
+                >
+                  {extractedText.map((pageText, index) => (
+                    <Text key={index} mb={2}>
+                      {pageText || "No text found on this page."}
+                    </Text>
+                  ))}
+                </Box>
+              )}
             </VStack>
           </Box>
-          <Box w="full">
-            <Heading as="h2" size="md" mb={4}>
-              Ways to Learn
-            </Heading>
-            <SimpleGrid columns={4} spacing={5}>
-              <FeatureBox
-                icon="📄"
-                title="Generate Flashcards"
-                onClick={() => alert("Generating Flashcards...")}
-              />
-              <FeatureBox
-                icon="📝"
-                title="Generate Quizzes"
-                onClick={() => alert("Generating Quizzes...")}
-              />
-              <FeatureBox
-                icon="💬"
-                title="Chat with AI"
-                onClick={() => alert("Starting AI Chat...")}
-              />
-              <FeatureBox
-                icon="🎥"
-                title="Generate Short Videos"
-                onClick={() => alert("Creating Short Videos...")}
-              />
-            </SimpleGrid>
-          </Box>
-        </VStack>
-        <VStack
-          w="300px"
-          ml={10}
-          spacing={4}
-          borderWidth="1px"
-          p={4}
-          borderRadius="lg"
-          height="100%"
-        >
-          <Heading as="h3" size="md">
-            Daily Quests
-          </Heading>
-          <Progress colorScheme="green" size="sm" value={75} mb={4} />
-          <List spacing={3} overflowY="auto">
-            <ListItem>
-              <ListIcon as={MdCheckCircle} color="green.500" />
-              Upload today's lecture notes
-            </ListItem>
-            <ListItem>
-              <ListIcon as={MdCheckCircle} color="green.500" />
-              Generate flashcards for chapter 7
-            </ListItem>
-            <ListItem>
-              <ListIcon as={MdCheckCircle} color="green.500" />
-              Complete AI chat session
-            </ListItem>
-            <ListItem>
-              <ListIcon as={MdCheckCircle} color="green.500" />
-              Review generated video content
-            </ListItem>
-          </List>
         </VStack>
       </Flex>
     </Container>
-  );
-}
-
-function FeatureBox({ icon, title, onClick }) {
-  return (
-    <Button
-      p={4}
-      borderWidth="1px"
-      borderRadius="lg"
-      w="full"
-      h="150px"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      onClick={onClick}
-    >
-      <Text fontSize="4xl">{icon}</Text>
-      <Text>{title}</Text>
-    </Button>
   );
 }
 
