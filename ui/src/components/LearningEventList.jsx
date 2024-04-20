@@ -17,31 +17,31 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { MdSchool, MdFilterList } from "react-icons/md";
-
+import { useNavigate } from "react-router-dom";
 const eventsData = [
   {
     id: 1,
     name: "Calculus 101",
     description: "Integration and Differentiation",
-    progress: 75,
-    status: "Active",
-    interactions: "68.3K",
+    progress: 100,
+    status: "Completed",
+    interactions: "00:00",
   },
   {
     id: 2,
     name: "Physics 201",
     description: "Mechanics and Optics",
-    progress: 60,
-    status: "Active",
-    interactions: "45.1K",
+    progress: 100,
+    status: "Completed",
+    interactions: "00:00",
   },
   {
     id: 3,
     name: "Chemistry 300",
     description: "Organic Compounds",
     progress: 40,
-    status: "Pending",
-    interactions: "25.7K",
+    status: "In Progress",
+    interactions: "16:50",
   },
   // More sample events
 ];
@@ -49,9 +49,15 @@ const eventsData = [
 const LearningEventItem = ({ event }) => {
   const bgColor = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
-
+  const navigate = useNavigate();
   return (
-    <ScaleFade initialScale={0.9} in={true}>
+    <ScaleFade
+      initialScale={0.1}
+      in={true}
+      onClick={() => {
+        navigate("/studyplan");
+      }}
+    >
       <Flex
         as="button"
         direction={{ base: "column", sm: "row" }}
@@ -67,6 +73,8 @@ const LearningEventItem = ({ event }) => {
         _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
         transition="background 0.2s"
         onClick={() => console.log(`Navigate to details for ${event.name}`)}
+        height="100px" // Set a fixed height for each card
+        w="50vw"
       >
         <Icon as={MdSchool} w={8} h={8} color="blue.500" />
         <Box flex="1" ml={4}>
@@ -78,14 +86,16 @@ const LearningEventItem = ({ event }) => {
         </Box>
         <Box>
           <Tooltip label={`${event.status} - Click for more info`} hasArrow>
-            <Badge colorScheme={event.status === "Active" ? "green" : "orange"}>
+            <Badge
+              colorScheme={event.status === "Completed" ? "green" : "orange"}
+            >
               {event.status}
             </Badge>
           </Tooltip>
           <Badge
             colorScheme="purple"
             ml={2}
-          >{`${event.interactions} interactions`}</Badge>
+          >{`${event.interactions} content remaining`}</Badge>
         </Box>
       </Flex>
     </ScaleFade>
@@ -95,7 +105,7 @@ const LearningEventItem = ({ event }) => {
 const LearningEventsList = () => {
   const [events, setEvents] = useState(eventsData);
   const [filter, setFilter] = useState("");
-  const [sortType, setSortType] = useState("name");
+  const [sortType, setSortType] = useState("Progress");
 
   useEffect(() => {
     const sortedEvents = [...events].sort((a, b) => {
