@@ -3,13 +3,10 @@ import {
   Box,
   Input,
   Button,
-  useColorModeValue,
-  useColorMode,
   FormControl,
   FormLabel,
   Heading,
   Flex,
-  IconButton,
   Tooltip,
   Divider,
   Text,
@@ -20,7 +17,6 @@ import {
   HStack,
   useToast,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 function EducationForm() {
@@ -29,7 +25,8 @@ function EducationForm() {
   const [studyTime, setStudyTime] = useState("");
   const [studyMethod, setStudyMethod] = useState("");
   const [learningPreference, setLearningPreference] = useState("");
-  const { colorMode, toggleColorMode } = useColorMode();
+  const [motivationLevel, setMotivationLevel] = useState("");
+  const [studyEnvironment, setStudyEnvironment] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -45,37 +42,22 @@ function EducationForm() {
     navigate("/studyplan");
   };
 
-  const bgBoxColor = useColorModeValue("white", "gray.800");
-  const boxShadowColor = useColorModeValue(
-    "rgba(0, 0, 0, 0.1)",
-    "rgba(256, 256, 256, 0.1)"
-  );
-
   return (
     <Flex
       minHeight="100vh"
       align="center"
       justify="center"
-      bg={useColorModeValue("gray.50", "gray.900")}
+      bg="gray.50"
       direction="column"
       p={4}
     >
       <VStack spacing={4} align="stretch" w="full" maxW="md">
-        <Tooltip label="Toggle Dark Mode" hasArrow placement="left">
-          <IconButton
-            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            isRound
-            size="lg"
-            alignSelf="flex-end"
-            onClick={toggleColorMode}
-          />
-        </Tooltip>
         <Box
           p={8}
           borderWidth={1}
           borderRadius="lg"
-          boxShadow={`0 4px 6px -1px ${boxShadowColor}`}
-          bg={bgBoxColor}
+          boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+          bg="white"
           w="full"
         >
           <Heading mb={6} textAlign="center">
@@ -147,7 +129,7 @@ function EducationForm() {
                 onChange={(e) => setStudyMethod(e.target.value)}
               />
             </FormControl>
-            <FormControl id="learningPreference" isRequired mb={8}>
+            <FormControl id="learningPreference" isRequired mb={4}>
               <FormLabel>What is your preferred learning style?</FormLabel>
               <RadioGroup
                 onChange={setLearningPreference}
@@ -159,6 +141,36 @@ function EducationForm() {
                   <Radio value="kinesthetic">Kinesthetic</Radio>
                 </Stack>
               </RadioGroup>
+            </FormControl>
+
+            <Divider my={4} />
+
+            <Text fontSize="lg" fontWeight="bold" mb={2}>
+              Additional Preferences
+            </Text>
+            <FormControl id="motivationLevel" isRequired mb={4}>
+              <FormLabel>What motivates you to study?</FormLabel>
+              <Input
+                variant="flushed"
+                focusBorderColor="blue.500"
+                errorBorderColor="red.500"
+                size="lg"
+                value={motivationLevel}
+                onChange={(e) => setMotivationLevel(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="studyEnvironment" isRequired mb={8}>
+              <FormLabel>
+                What kind of environment do you prefer for studying?
+              </FormLabel>
+              <Input
+                variant="flushed"
+                focusBorderColor="blue.500"
+                errorBorderColor="red.500"
+                size="lg"
+                value={studyEnvironment}
+                onChange={(e) => setStudyEnvironment(e.target.value)}
+              />
             </FormControl>
 
             <Button type="submit" colorScheme="blue" size="lg" isFullWidth>
