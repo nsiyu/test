@@ -8,7 +8,6 @@ class QueryRequest(Model):
 
 class Response(Model):
     text: str 
- 
 
 class PdfRequest(Model):
     query: str

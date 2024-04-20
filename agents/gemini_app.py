@@ -3,6 +3,7 @@ import asyncio
 from uagents import Model
 from uagents.query import query
 from flask import request, jsonify
+from database import get_db
 
 AGENT_ADDRESS = "agent1qwg20ukwk97t989h6kc8a3sev0lvaltxakmvvn3sqz9jdjw4wsuxqa45e8l"
  
@@ -30,8 +31,10 @@ def setup_gemini_routes(app):
             if query_text:
                 req = QueryRequest(query=query_text)
                 result = asyncio.run(make_agent_call(req))
+            
                 return jsonify({"message": result}), 200
             else:
                 return jsonify({"error": "No query provided"}), 400
         else:
             return jsonify({"error": "Request must be JSON"}), 415
+        
