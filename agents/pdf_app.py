@@ -21,7 +21,7 @@ async def make_agent_call(query_text):
         return f"successful call - agent response: {response}"
     except Exception as e:
         return f"unsuccessful agent call - error: {str(e)}"
-    
+
 def setup_pdf_routes(app):
     @app.route('/upload-pdf', methods=['POST'])
     def upload_pdf():
@@ -40,10 +40,8 @@ def setup_pdf_routes(app):
                 for page in reader.pages:
                     page_text = page.extract_text()
                     text += page_text
-                print(text)
                 req = PdfRequest(query=text)
                 result = asyncio.run(make_agent_call(req))
-                
                 return jsonify({'text': text})
             except Exception as e:
                 return str(e), 500

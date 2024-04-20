@@ -17,7 +17,7 @@ async def agent_query(query_text):
 async def make_agent_call(query_text):
     try:
         response = await agent_query(query_text)
-        return f"successful call - agent response: {response}"
+        return f"{response}"
     except Exception as e:
         return f"unsuccessful agent call - error: {str(e)}"
  

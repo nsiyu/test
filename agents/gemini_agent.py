@@ -56,7 +56,6 @@ async def handle_query_response(ctx: Context, sender: str, _query: QueryRequest)
 @Gemini_agent.on_query(model=PdfRequest, replies={PdfResponse})
 async def handle_query_response(ctx: Context, sender: str, _query: PdfRequest):
     message = await handle_message(_query.query)
-    print(message)
     ctx.logger.info(message)
     await ctx.send(sender, PdfResponse(text=message))
 
