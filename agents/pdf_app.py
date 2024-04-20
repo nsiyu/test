@@ -44,6 +44,7 @@ def setup_pdf_routes(app):
 
                 result = asyncio.run(make_agent_call(req))
                 for item in result.split(',')[1:]:
+                    print(item)
                     cur = item.split('-')
                     date = cur[0]
                     day = cur[1]
