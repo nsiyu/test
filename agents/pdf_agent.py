@@ -16,7 +16,6 @@ class Response(Model):
 
 fund_agent_if_low(pdf_agent.wallet.address())
 
-
 @pdf_agent.on_query(model=QueryRequest, replies={Response})
 async def interval(ctx: Context):
    pass
