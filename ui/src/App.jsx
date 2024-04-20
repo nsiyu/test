@@ -41,7 +41,7 @@ function WithNavbar() {
       <Box pt="8rem">
         {" "}
         <Routes>
-          <Route index element={<HomePage/>} />
+          <Route index element={<ContentPage/>} />
         </Routes>
       </Box>
     </>
