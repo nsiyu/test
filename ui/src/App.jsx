@@ -11,6 +11,8 @@ import Calendar from "./components/Calerndar/Calendar.jsx";
 import StudyPlan from "./components/StudyPlan.jsx";
 import Quiz from "./components/Quiz.jsx";
 import EducationForm from "./components/EducationPreference.jsx";
+import ContentPage from "./components/ContentPage.jsx";
+import Flashcard from "./components/Flashcard.jsx";
 
 function App() {
   return (
@@ -39,7 +41,7 @@ function WithNavbar() {
       <Navbar />
       <Box pt="8rem">
         <Routes>
-          <Route index element={<HomePage />} />
+          <Route index element={<ContentPage/>} />
         </Routes>
       </Box>
     </>
