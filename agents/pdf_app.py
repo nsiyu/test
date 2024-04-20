@@ -4,7 +4,7 @@ from uagents.query import query
 from uagents import Model
 import json
 import asyncio
-
+from database import get_db
 AGENT_ADDRESS = "agent1qwg20ukwk97t989h6kc8a3sev0lvaltxakmvvn3sqz9jdjw4wsuxqa45e8l"
 
 class PdfRequest(Model):
@@ -41,10 +41,38 @@ def setup_pdf_routes(app):
                     page_text = page.extract_text()
                     text += page_text
                 req = PdfRequest(query=text)
+
                 result = asyncio.run(make_agent_call(req))
+                for item in result.split(','):
+                    cur = item.split('-')
+                    date = cur[0]
+                    day = cur[1]
+                    topic = ''
+                    for word in cur[2:]:
+                        topic += word
+                        topic += ' '
+                    topic = topic[:len(topic)-1]
+                    db = get_db()
+                    db.calendar.insert_one({"date": date, "day": day, "topic": topic})
+
                 return jsonify({'text': text})
             except Exception as e:
                 return str(e), 500
         else:
             return "Invalid file format", 400
         
+    @app.route('/get-calendar-items', methods=['GET'])
+    def get_calendar_items():
+        db = get_db()
+        try:
+            items = db.calendar.find({})
+            result = []
+            for item in items:
+                result.append({
+                    "date": item.get('date', ''),
+                    "day": item.get('day', ''),
+                    "topic": item.get('topic', '')
+                })
+            return jsonify(result), 200
+        except Exception as e:
+            return str(e), 500
