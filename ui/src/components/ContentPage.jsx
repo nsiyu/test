@@ -23,23 +23,12 @@ import Upload from "./Upload.jsx";
 function App() {
   const [file, setFile] = useState(null);
   const [extractedText, setExtractedText] = useState([]);
-  const toast = useToast();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
 
   const handleFileUpload = async () => {
-    if (!file) {
-      toast({
-        title: "No file selected",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
     const formData = new FormData();
     formData.append("file", file);
 
@@ -51,13 +40,6 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setExtractedText(data.text);
-        toast({
-          title: "File uploaded successfully",
-          description: "Text has been extracted from the PDF.",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
       });
   };
 
@@ -70,23 +52,8 @@ function App() {
           </Heading>
           <Box w="full" p={4} borderWidth="1px" borderRadius="lg">
             <VStack spacing={4}>
-              <HStack w="full" alignItems="center" spacing={4}>
-                <Input
-                  type="file"
-                  onChange={handleFileChange}
-                  size="lg"
-                  placeholder="Upload PDF"
-                  accept="application/pdf"
-                />
-                <Button
-                  colorScheme="blue"
-                  leftIcon={<FaUpload />}
-                  onClick={handleFileUpload}
-                >
-                  Upload PDF
-                </Button>
-              </HStack>
-              {/* Displaying the extracted text */}
+              <HStack w="full" alignItems="center" spacing={4}></HStack>
+              <Upload></Upload>
               {extractedText.length > 0 && (
                 <Box
                   overflowY="auto"
