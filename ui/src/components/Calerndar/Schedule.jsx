@@ -42,6 +42,12 @@ function Schedule() {
     setSelectedMonthIndex(parseInt(event.target.value, 10));
   };
 
+  useEffect(
+    async function fetchDates(){
+      
+    }
+  )
+  
 
 
   const bgColor = useColorModeValue("gray.50", "gray.700");
