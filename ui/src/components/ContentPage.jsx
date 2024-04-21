@@ -57,25 +57,25 @@ function App() {
       method: "POST",
       body: formData,
     })
-    .then((response) => response.json())
-    .then((data) => {
-      toast({
-        title: "File uploaded successfully",
-        description: "Text has been extracted from the PDF.",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
+      .then((response) => response.json())
+      .then((data) => {
+        toast({
+          title: "File uploaded successfully",
+          description: "Text has been extracted from the PDF.",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: "Upload failed",
+          description: "Unable to upload file.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
       });
-    })
-    .catch((error) => {
-      toast({
-        title: "Upload failed",
-        description: "Unable to upload file.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-    });
   };
 
   const handleVideoEnd = () => {

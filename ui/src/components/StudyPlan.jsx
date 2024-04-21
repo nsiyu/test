@@ -158,6 +158,9 @@ const StudyPlan = () => {
           alignItems="center"
           bg={useColorModeValue("white", "gray.700")}
           transition="background 0.3s"
+          onClick={() => {
+            navigate("/contentpage");
+          }}
         >
           <VStack align="start" spacing={1}>
             <Text fontWeight="bold" fontSize="lg">

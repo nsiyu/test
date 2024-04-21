@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   VStack,
@@ -9,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import theme from "../../theme"; // Ensure this imports correctly to use its values
 
-// Sample task data
 const tasks = [
   {
     date: "2024-04-20",
@@ -33,10 +33,29 @@ const TaskList = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const [calendarItems, setCalendarItems] = useState([]);
+  useEffect(() => {
+    const fetchCalendarItems = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/get-calendar-items"
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setCalendarItems(data);
+        console.log(calendarItems);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchCalendarItems();
+  }, []);
+
   return (
     <Container maxW="container.xl" p="6">
       <VStack spacing={5} align="stretch">
-        {tasks.map((task, index, arr) => (
+        {calendarItems.map((task, index, arr) => (
           <Box key={index}>
             {index === 0 || arr[index - 1].date !== task.date ? (
               <Heading
@@ -45,7 +64,7 @@ const TaskList = () => {
                 fontSize="xl"
                 color={colors.primary || "blue.800"}
               >
-                {formatDate(task.date)}
+                {task.date} {task.day}
               </Heading>
             ) : null}
             <Box
@@ -56,7 +75,7 @@ const TaskList = () => {
               mb={0}
             >
               <Text color={colors.text || "gray.600"} fontSize="md">
-                {task.description}
+                {task.topic}
               </Text>
             </Box>
           </Box>
