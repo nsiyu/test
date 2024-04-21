@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   VStack,
@@ -11,7 +11,29 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 const QuizPage = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
+
+  const [qquestions, setQuestion] = useState([]);
+
+  useEffect(() => {
+    const fetchCalendarItems = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/get-calendar-items"
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setQuestion(data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchCalendarItems();
+  }, []);
+
   const questions = [
     "Capital of France",
     "Author of To Kill a Mockingbird",
@@ -19,8 +41,6 @@ const QuizPage = () => {
     "Painter of the Mona Lisa",
     "Chemical symbol for gold",
   ];
-  const toast = useToast();
-  const navigate = useNavigate();
 
   const handleAnswerChange = (question, answer) => {
     setAnswers((prevAnswers) => ({

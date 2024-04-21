@@ -19,8 +19,7 @@ import Confetti from "react-confetti";
 import { FaAngleDown, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 const QuizFeedback = () => {
-  const navigate = useNavigate
-  // Placeholder data for the quiz
+  const navigate = useNavigate();
   const quizData = [
     {
       text: "What is the capital of France?",
@@ -32,17 +31,16 @@ const QuizFeedback = () => {
       correctAnswer: "Harper Lee",
       explanation: "Harper Lee wrote 'To Kill a Mockingbird'.",
     },
-    // Add more placeholder questions...
   ];
 
-  // Placeholder data for user's answers
-  const userAnswers = ["Paris", "J.K. Rowling"]; // Matched with quizData indices
+  const userAnswers = ["Paris", "J.K. Rowling"];
 
   const themeColor = useColorModeValue("primary", "primaryDark");
-  const [reviewedQuestions, setReviewedQuestions] = useState(Array(quizData.length).fill(false));
+  const [reviewedQuestions, setReviewedQuestions] = useState(
+    Array(quizData.length).fill(false)
+  );
   const [confettiActive, setConfettiActive] = useState(false);
 
-  // Function to handle toggling the review status of a question
   const toggleReview = (index) => {
     setReviewedQuestions((prev) => {
       const newReviewedQuestions = [...prev];
@@ -51,12 +49,10 @@ const QuizFeedback = () => {
     });
   };
 
-  // Calculate progress
   const totalQuestions = quizData.length;
   const reviewedCount = reviewedQuestions.filter((reviewed) => reviewed).length;
   const progress = (reviewedCount / totalQuestions) * 100;
 
-  // Check if all questions have been reviewed
   const allQuestionsReviewed = reviewedQuestions.every((reviewed) => reviewed);
 
   useEffect(() => {
@@ -68,10 +64,8 @@ const QuizFeedback = () => {
     }
   }, [allQuestionsReviewed]);
 
-  // Function to handle Next button click
   const handleNextClick = () => {
-    // Add your logic for what should happen when Next button is clicked
-    console.log("Next button clicked");
+    navigate("/studyplan");
   };
 
   return (
@@ -91,16 +85,22 @@ const QuizFeedback = () => {
                   <Box flex="1" textAlign="left">
                     {`Question ${index + 1}: ${question.text}`}
                     {userAnswers[index] === question.correctAnswer ? (
-                      <Text color="green.500" ml={2}> (Right)</Text>
+                      <Text color="green.500" ml={2}>
+                        {" "}
+                        (Right)
+                      </Text>
                     ) : (
-                      <Text color="red.500" ml={2}> (Wrong)</Text>
+                      <Text color="red.500" ml={2}>
+                        {" "}
+                        (Wrong)
+                      </Text>
                     )}
                   </Box>
                   <IconButton
                     aria-label="Expand"
                     icon={<FaAngleDown />}
                     bg={themeColor}
-                    color='themeColor'
+                    color="themeColor"
                   />
                 </AccordionButton>
               </h2>
@@ -143,7 +143,14 @@ const QuizFeedback = () => {
         )}
       </Box>
       {confettiActive && (
-        <Box position="fixed" top="0" left="0" width="100%" height="100%" zIndex="999">
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          zIndex="999"
+        >
           <Confetti />
         </Box>
       )}
