@@ -85,37 +85,6 @@ function Dashboard() {
                     <MdWorkOutline size="1.25em" style={{ marginRight: 4 }} />
                     Today's Tasks {today}
                   </Text>
-                  <Box
-                    w={["100%", "48%"]}
-                    h={["auto", "200%"]}
-                    p={4}
-                    rounded="lg"
-                    bg="white"
-                    shadow="lg"
-                    mb={4}
-                  >
-                    <HStack mb={4}>
-                      <Icon as={MdSchool} fontSize="xl" />
-                      <Text fontSize="xl" fontWeight="bold">
-                        Current Learning Plan
-                      </Text>
-                    </HStack>
-                    {currentLearningPlan.map((item, index) => (
-                      <Flex key={index} mb={2} alignItems="center">
-                        <Text mr={4}>{item.topic}</Text>
-                        <CircularProgress
-                          value={item.percentCompleted}
-                          size="40px"
-                          color="blue.400"
-                        >
-                          <CircularProgressLabel>
-                            {item.percentCompleted}%
-                          </CircularProgressLabel>
-                        </CircularProgress>
-                      </Flex>
-                    ))}{" "}
-                  </Box>
-                  ;
                 </Box>
               </VStack>
               <Box
