@@ -46,7 +46,12 @@ const PieChart = () => {
           </Text>
         </HStack>
         {currentLearningPlan.map((item, index) => (
-          <Flex key={index} mb={2} alignItems="center">
+          <Flex
+            key={index}
+            mb={2}
+            alignItems="center"
+            justify={"space-between"}
+          >
             <Text mr={4}>{item.topic}</Text>
             <CircularProgress
               value={item.percentCompleted}

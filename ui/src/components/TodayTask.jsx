@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
   Flex,
@@ -10,83 +10,33 @@ import {
   Icon,
   Tooltip,
   ScaleFade,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  IconButton,
 } from "@chakra-ui/react";
 import { MdSchool, MdFilterList } from "react-icons/md";
+import { FaUpload, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-const LearningEventItem = ({ event, progress, estimateTime }) => {
-  const bgColor = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const navigate = useNavigate();
-
-  const taskStatus = progress == 100 ? "Completed" : "In Progress";
-  return (
-    <ScaleFade
-      initialScale={0.1}
-      in={true}
-      onClick={() => {
-        navigate("/contentpage");
-      }}
-    >
-      <Flex
-        as="button"
-        direction={{ base: "column", sm: "row" }}
-        align="center"
-        justify="space-between"
-        p={4}
-        shadow="md"
-        borderWidth="1px"
-        borderColor={borderColor}
-        bg={bgColor}
-        borderRadius="lg"
-        mb={4}
-        _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
-        transition="background 0.2s"
-        height="100px" // Set a fixed height for each card
-        w="50vw"
-      >
-        <Icon as={MdSchool} w={8} h={8} color="blue.500" />
-        <Box flex="1" ml={4}>
-          <Text fontWeight="bold" fontSize="lg">
-            {event.topic}
-          </Text>
-          <Text fontSize="sm">{event.description}</Text>
-          <Progress colorScheme="blue" size="sm" value={progress} />
-        </Box>
-        <Box>
-          <Tooltip label={`${taskStatus} - Click for more info`} hasArrow>
-            <Badge
-              colorScheme={taskStatus === "Completed" ? "green" : "orange"}
-            >
-              {taskStatus}
-            </Badge>
-          </Tooltip>
-          <Badge
-            colorScheme="purple"
-            ml={2}
-          >{`${estimateTime} remaining`}</Badge>
-        </Box>
-      </Flex>
-    </ScaleFade>
-  );
-};
+import AuthContext from "../context/AuthProvider"; // Adjust the path as necessary
 
 const TodayTask = () => {
   const [calendarItems, setCalendarItems] = useState([]);
-  const monthMapping = {
-    jan: "01",
-    feb: "02",
-    mar: "03",
-    apr: "04",
-    may: "05",
-    jun: "06",
-    jul: "07",
-    aug: "08",
-    sep: "09",
-    oct: "10",
-    nov: "11",
-    dec: "12",
-  };
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedTopicId, setSelectedTopicId] = useState(null);
+  const [videoLink, setVideoLink] = useState("");
+  const [uploadedVideos, setUploadedVideos] = useState({});
+  const navigate = useNavigate();
+  const { isAuthenticated } = useContext(AuthContext);
+
   useEffect(() => {
     const fetchCalendarItems = async () => {
       try {
@@ -95,15 +45,7 @@ const TodayTask = () => {
         );
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
-
-        const today = new Date().toISOString().slice(0, 10);
-
-        const todayTasks = data.filter((task) => {
-          const monthNumber = monthMapping[task.date];
-          return `2024-${monthNumber}-${task.day}` === today;
-        });
-
-        setCalendarItems(todayTasks);
+        setCalendarItems(data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -112,31 +54,111 @@ const TodayTask = () => {
     fetchCalendarItems();
   }, []);
 
-  const convertFetchedDataToTasks = (data) =>
-    data.map((item, index) => ({
-      id: index + 1,
-      topic: item.topic,
-      progress: Math.floor(Math.random() * 21) * 5, // Generates 0, 5, 10, ..., 95, 100
-      estimatedTime: `${String(Math.floor(Math.random() * 24)).padStart(
-        2,
-        "0"
-      )}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`, // Generates time in HH:MM format
+  const handleUpload = (topicId, link) => {
+    setUploadedVideos((prev) => ({
+      ...prev,
+      [topicId]: link,
     }));
+    setIsOpen(false);
+    setVideoLink("");
+  };
 
-  convertFetchedDataToTasks(calendarItems);
+  const renderIcons = (topicId) => {
+    if (uploadedVideos[topicId]) {
+      return (
+        <Tooltip label="Play Video" hasArrow>
+          <IconButton
+            icon={<FaPlay />}
+            aria-label="Play Video"
+            onClick={() => console.log("Play video for topic:", topicId)}
+          />
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip label="Upload Video" hasArrow>
+          <IconButton
+            icon={<FaUpload />}
+            aria-label="Upload Video"
+            onClick={() => {
+              setSelectedTopicId(topicId);
+              setIsOpen(true);
+            }}
+          />
+        </Tooltip>
+      );
+    }
+  };
+
   return (
     <VStack spacing={4} p={5}>
-      {calendarItems.map((calendarItem, index) => (
-        <LearningEventItem
+      {calendarItems.map((item, index) => (
+        <Flex
           key={index}
-          event={calendarItem}
-          progress={Math.floor(Math.random() * 21) * 5}
-          estimateTime={`${String(Math.floor(Math.random() * 24)).padStart(
-            2,
-            "0"
-          )}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`}
-        />
+          as="button"
+          direction={{ base: "column", sm: "row" }}
+          align="center"
+          justify="space-between"
+          p={4}
+          shadow="md"
+          borderWidth="1px"
+          bg={useColorModeValue("white", "gray.800")}
+          borderRadius="lg"
+          mb={4}
+          _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
+          transition="background 0.2s"
+          height="100px"
+          w="50vw"
+        >
+          <Icon as={MdSchool} w={8} h={8} color="blue.500" />
+          <Box flex="1" ml={4}>
+            <Text
+              fontWeight="bold"
+              fontSize="lg"
+              onClick={() => {
+                navigate("contentpage");
+              }}
+            >
+              {item.topic}
+            </Text>
+            <Progress colorScheme="blue" size="sm" value={0} />
+          </Box>
+          <Box>
+            <Tooltip label="Click for more info" hasArrow>
+              <Badge colorScheme="green">In Progress</Badge>
+            </Tooltip>
+            <Badge colorScheme="purple" ml={2}>
+              12:34 remaining
+            </Badge>
+          </Box>
+          {renderIcons(index)}
+        </Flex>
       ))}
+
+      {/* Video Upload Modal */}
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload Video</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Enter video link:</FormLabel>
+              <Input
+                value={videoLink}
+                onChange={(e) => setVideoLink(e.target.value)}
+                placeholder="https://www.example.com/video"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={() => handleUpload(selectedTopicId, videoLink)}>
+              Upload
+            </Button>
+            <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </VStack>
   );
 };

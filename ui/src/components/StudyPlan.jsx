@@ -24,22 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { FaMoon, FaSun, FaUpload, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthProvider";
 
-const months = [
-  { num: 0, name: "January", days: 31 },
-  { num: 1, name: "February", days: 28 },
-  { num: 2, name: "March", days: 31 },
-  { num: 3, name: "April", days: 30 },
-  { num: 4, name: "May", days: 31 },
-  { num: 5, name: "June", days: 30 },
-  { num: 6, name: "July", days: 31 },
-  { num: 7, name: "August", days: 31 },
-  { num: 8, name: "September", days: 30 },
-  { num: 9, name: "October", days: 31 },
-  { num: 10, name: "November", days: 30 },
-  { num: 11, name: "December", days: 31 },
-];
 const monthAbbreviations = {
   jan: "01",
   feb: "02",
@@ -84,7 +69,6 @@ const StudyPlan = () => {
     fetchCalendarItems();
   }, []);
 
-  const { isAuthenticated } = useContext(AuthContext);
   const { colorMode, toggleColorMode } = useColorMode();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -152,19 +136,6 @@ const StudyPlan = () => {
   return (
     <VStack spacing={6} align="stretch" p={5}>
       <HStack justifyContent="space-between">
-        {isAuthenticated && (
-          <Text
-            fontSize="lg"
-            cursor="pointer"
-            color={theme.colors.primary}
-            _hover={{ color: "pink" }}
-            onClick={() => {
-              navigate("/courses");
-            }}
-          >
-            &larr; Back to Courses
-          </Text>
-        )}
         <Heading as="h1" size="xl">
           Your Study Plan
         </Heading>
@@ -189,13 +160,16 @@ const StudyPlan = () => {
           alignItems="center"
           bg={useColorModeValue("white", "gray.700")}
           transition="background 0.3s"
-          onClick={() => {
-            navigate("/contentpage");
-          }}
           _hover={{ cursor: "pointer" }}
         >
           <VStack align="start" spacing={1}>
-            <Text fontWeight="bold" fontSize="lg">
+            <Text
+              fontWeight="bold"
+              fontSize="lg"
+              onClick={() => {
+                navigate("/contentpage");
+              }}
+            >
               {task.name}
             </Text>
             <Text fontSize="sm">Expected time: {task.date}</Text>
