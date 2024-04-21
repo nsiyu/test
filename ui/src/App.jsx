@@ -15,6 +15,8 @@ import Flashcard from "./components/Flashcard.jsx";
 import FileUploadPage from "./components/UploadPage.jsx";
 import Feedback from "./components/feedback";
 import UploadPage from "./components/UploadPage.jsx";
+import Dashboard from "./components/Dashboard";
+import QuizPage from "./components/Quizpage";
  
 function App() {
   return (
@@ -30,7 +32,11 @@ function App() {
           <Route path="/UserInfo" element={<EducationForm />} />
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
-          <Route path="/" element={<ContentPage />}/>
+          <Route path="/" element={<Feedback/>}/>
+          <Route path="/Dashboard" element={<Dashboard/>}/>
+          <Route path="/Feedback" element={<Feedback/>}/>
+          <Route path="/Quizpage" element={<QuizPage/>}/>
+
           <Route path="/uploadpage" element={<FileUploadPage />} />
           <Route path="/upload" element={<UploadPage />} />
           <Route index element={<></>} />
