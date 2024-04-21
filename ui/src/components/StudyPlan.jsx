@@ -9,23 +9,27 @@ import {
   useColorMode,
   useColorModeValue,
   Tooltip,
-  useTheme, // Import useTheme to access the theme object
+  useTheme,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
-import {
-  FaRobot,
-  FaQuestionCircle,
-  FaVideo,
-  FaMoon,
-  FaSun,
-} from "react-icons/fa";
+import { FaRobot, FaQuestionCircle, FaMoon, FaSun, FaUpload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 
 const StudyPlan = () => {
-  const { isAuthenticated, logout, user } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const { colorMode, toggleColorMode } = useColorMode();
-  const theme = useTheme(); // Use the theme object
-  console.log(isAuthenticated);
+  const theme = useTheme();
   const navigate = useNavigate();
   const topics = [
     {
@@ -43,12 +47,75 @@ const StudyPlan = () => {
     // Additional topics...
   ];
 
-  const [selectedMethod, setSelectedMethod] = useState("");
+  const [uploadedVideos, setUploadedVideos] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedTopicId, setSelectedTopicId] = useState(null);
+  const [videoLink, setVideoLink] = useState('');
 
-  const learningMethods = {
-    game: "Gamified Content",
-    quiz: "Quiz Yourself",
-    ai: "AI Tutor",
+  const handleUpload = (topicId, link) => {
+    setUploadedVideos((prevVideos) => ({
+      ...prevVideos,
+      [topicId]: link,
+    }));
+    setIsOpen(false);
+    setVideoLink('');
+  };
+
+  const renderIcons = (topicId) => {
+    if (uploadedVideos[topicId]) {
+      return (
+        <>
+          <Tooltip label="Quiz Yourself" hasArrow>
+            <IconButton
+              icon={<FaQuestionCircle />}
+              aria-label="Quiz Yourself"
+              bg={theme.colors.primary}
+              _hover={{ bg: theme.colors.primaryDark }}
+              onClick={() =>
+                console.log("Quiz clicked for topic:", topics[topicId].name)
+              }
+            />
+          </Tooltip>
+          <Tooltip label="AI Tutor" hasArrow>
+            <IconButton
+              icon={<FaRobot />}
+              aria-label="AI Tutor"
+              bg={theme.colors.primary}
+              _hover={{ bg: theme.colors.primaryDark }}
+              onClick={() =>
+                console.log("AI Tutor clicked for topic:", topics[topicId].name)
+              }
+            />
+          </Tooltip>
+          <Tooltip label="Gamified Content" hasArrow>
+            <IconButton
+              icon={<FaRobot />}
+              aria-label="Gamified Content"
+              bg={theme.colors.primary}
+              _hover={{ bg: theme.colors.primaryDark }}
+              onClick={() =>
+                console.log("Gamified Content clicked for topic:", topics[topicId].name)
+              }
+            />
+          </Tooltip>
+        </>
+      );
+    } else {
+      return (
+        <Tooltip label="Upload Video" hasArrow>
+          <IconButton
+            icon={<FaUpload />}
+            aria-label="Upload Video"
+            bg={theme.colors.primary}
+            _hover={{ bg: theme.colors.primaryDark }}
+            onClick={() => {
+              setSelectedTopicId(topicId);
+              setIsOpen(true);
+            }}
+          />
+        </Tooltip>
+      );
+    }
   };
 
   return (
@@ -58,8 +125,8 @@ const StudyPlan = () => {
           <Text
             fontSize="lg"
             cursor="pointer"
-            color={theme.colors.primary} // Use the theme color for text
-            _hover={{ color: "pink" }} // Use the theme color for hover
+            color={theme.colors.primary}
+            _hover={{ color: "pink" }}
             onClick={() => {
               navigate("/courses");
             }}
@@ -74,8 +141,8 @@ const StudyPlan = () => {
           icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
           aria-label="Toggle color mode"
           onClick={toggleColorMode}
-          bg={theme.colors.primary} // Use the theme color for button background
-          _hover={{ bg: theme.colors.primaryDark }} // Use theme color for hover
+          bg={theme.colors.primary}
+          _hover={{ bg: theme.colors.primaryDark }}
           size="lg"
         />
       </HStack>
@@ -99,33 +166,34 @@ const StudyPlan = () => {
             <Text fontSize="sm">Expected time: {topic.finishTime}</Text>
           </VStack>
           <HStack spacing={2}>
-            {["quiz", "video", "ai"].map((method) => (
-              <Tooltip label={learningMethods[method]} hasArrow>
-                <IconButton
-                  icon={
-                    method === "quiz" ? (
-                      <FaQuestionCircle />
-                    ) : method === "video" ? (
-                      <FaVideo />
-                    ) : (
-                      <FaRobot />
-                    )
-                  }
-                  aria-label={`${learningMethods[method]} for ${topic.name}`}
-                  bg={theme.colors.primary} // Use the theme color for button background
-                  _hover={{ bg: theme.colors.primaryDark }} // Use theme color for hover
-                  onClick={() =>
-                    console.log(
-                      `${learningMethods[method]} clicked for topic:`,
-                      topic.name
-                    )
-                  }
-                />
-              </Tooltip>
-            ))}
+            {renderIcons(topic.id)}
           </HStack>
         </Box>
       ))}
+      {/* Video Upload Modal */}
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload Video</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Enter video link:</FormLabel>
+              <Input
+                value={videoLink}
+                onChange={(e) => setVideoLink(e.target.value)}
+                placeholder="https://www.example.com/video"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={() => handleUpload(selectedTopicId, videoLink)}>
+              Upload
+            </Button>
+            <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </VStack>
   );
 };

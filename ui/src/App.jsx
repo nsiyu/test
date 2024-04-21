@@ -27,9 +27,9 @@ function App() {
           <Route path="/UserInfo" element={<EducationForm />} />
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
+          <Route path="/" element={<LearningEventsList />}>
+            <Route index element={<HomePage/>} />
           <Route path="/uploadpage" element={<FileUploadPage />} />
-          <Route path="/" element={<ContentPage />}>
-            <Route index element={<HomePage />} />
           </Route>
         </Routes>
       </AuthProvider>
