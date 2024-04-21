@@ -10,69 +10,31 @@ import {
   Icon,
   Tooltip,
   ScaleFade,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  IconButton,
 } from "@chakra-ui/react";
 import { MdSchool, MdFilterList } from "react-icons/md";
+import { FaUpload, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-const LearningEventItem = ({ event, progress, estimateTime }) => {
-  const bgColor = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const navigate = useNavigate();
-
-  const taskStatus = progress == 100 ? "Completed" : "In Progress";
-  return (
-    <ScaleFade
-      initialScale={0.1}
-      in={true}
-      onClick={() => {
-        navigate("/contentpage");
-      }}
-    >
-      <Flex
-        as="button"
-        direction={{ base: "column", sm: "row" }}
-        align="center"
-        justify="space-between"
-        p={4}
-        shadow="md"
-        borderWidth="1px"
-        borderColor={borderColor}
-        bg={bgColor}
-        borderRadius="lg"
-        mb={4}
-        _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
-        transition="background 0.2s"
-        height="100px" // Set a fixed height for each card
-        w="50vw"
-      >
-        <Icon as={MdSchool} w={8} h={8} color="blue.500" />
-        <Box flex="1" ml={4}>
-          <Text fontWeight="bold" fontSize="lg">
-            {event.topic}
-          </Text>
-          <Text fontSize="sm">{event.description}</Text>
-          <Progress colorScheme="blue" size="sm" value={progress} />
-        </Box>
-        <Box>
-          <Tooltip label={`${taskStatus} - Click for more info`} hasArrow>
-            <Badge
-              colorScheme={taskStatus === "Completed" ? "green" : "orange"}
-            >
-              {taskStatus}
-            </Badge>
-          </Tooltip>
-          <Badge
-            colorScheme="purple"
-            ml={2}
-          >{`${estimateTime} remaining`}</Badge>
-        </Box>
-      </Flex>
-    </ScaleFade>
-  );
-};
 
 const TodayTask = () => {
   const [calendarItems, setCalendarItems] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+  const [videoLink, setVideoLink] = useState("");
+  const [uploadedVideos, setUploadedVideos] = useState({});
+  const navigate = useNavigate();
+
   const monthMapping = {
     jan: "01",
     feb: "02",
@@ -87,6 +49,7 @@ const TodayTask = () => {
     nov: "11",
     dec: "12",
   };
+
   useEffect(() => {
     const fetchCalendarItems = async () => {
       try {
@@ -112,31 +75,109 @@ const TodayTask = () => {
     fetchCalendarItems();
   }, []);
 
-  const convertFetchedDataToTasks = (data) =>
-    data.map((item, index) => ({
-      id: index + 1,
-      topic: item.topic,
-      progress: Math.floor(Math.random() * 21) * 5, // Generates 0, 5, 10, ..., 95, 100
-      estimatedTime: `${String(Math.floor(Math.random() * 24)).padStart(
-        2,
-        "0"
-      )}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`, // Generates time in HH:MM format
+  const handleUpload = (eventId, link) => {
+    setUploadedVideos((prevVideos) => ({
+      ...prevVideos,
+      [eventId]: link,
     }));
+    setIsOpen(false);
+    setVideoLink("");
+  };
 
-  convertFetchedDataToTasks(calendarItems);
+  const renderIcons = (eventId) => {
+    if (uploadedVideos[eventId]) {
+      return (
+        <Tooltip label="Play Video" hasArrow>
+          <IconButton
+            icon={<FaPlay />}
+            aria-label="Play Video"
+            onClick={() => console.log("Play video for event ID:", eventId)}
+          />
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip label="Upload Video" hasArrow>
+          <IconButton
+            icon={<FaUpload />}
+            aria-label="Upload Video"
+            onClick={() => {
+              setSelectedEventId(eventId);
+              setIsOpen(true);
+            }}
+          />
+        </Tooltip>
+      );
+    }
+  };
+
   return (
     <VStack spacing={4} p={5}>
       {calendarItems.map((calendarItem, index) => (
-        <LearningEventItem
-          key={index}
-          event={calendarItem}
-          progress={Math.floor(Math.random() * 21) * 5}
-          estimateTime={`${String(Math.floor(Math.random() * 24)).padStart(
-            2,
-            "0"
-          )}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`}
-        />
+        <ScaleFade key={index} initialScale={0.1} in={true}>
+          <Flex
+            as="button"
+            direction={{ base: "column", sm: "row" }}
+            align="center"
+            justify="space-between"
+            p={4}
+            shadow="md"
+            borderWidth="1px"
+            borderColor={useColorModeValue("gray.200", "gray.700")}
+            bg={useColorModeValue("white", "gray.800")}
+            borderRadius="lg"
+            mb={4}
+            _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
+            transition="background 0.2s"
+            height="100px"
+            w="50vw"
+          >
+            <Icon as={MdSchool} w={8} h={8} color="blue.500" />
+            <Box flex="1" ml={4}>
+              <Text
+                fontWeight="bold"
+                fontSize="lg"
+                onClick={() => navigate("/contentpage")}
+              >
+                {calendarItem.topic}
+              </Text>
+              <Text fontSize="sm">{calendarItem.description}</Text>
+            </Box>
+            <Box>{renderIcons(calendarItem.id)}</Box>
+          </Flex>
+        </ScaleFade>
       ))}
+
+      {/* Video Upload Modal */}
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload Video</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Enter video link:</FormLabel>
+              <Input
+                value={videoLink}
+                onChange={(e) => setVideoLink(e.target.value)}
+                placeholder="https://www.example.com/video"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => handleUpload(selectedEventId, videoLink)}
+            >
+              Upload
+            </Button>
+            <Button variant="ghost" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </VStack>
   );
 };

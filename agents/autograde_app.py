@@ -5,6 +5,7 @@ import json
 import asyncio
 from typing import List
 from flask import request, jsonify
+from database import get_db
 
 AGENT_ADDRESS = "agent1q2p4shdx3ua25u73l26zdc36w4upax20vg7nqrsck3hqgqw7c46kv2e5z56"
 GEMINI_AGENT = 'agent1qwg20ukwk97t989h6kc8a3sev0lvaltxakmvvn3sqz9jdjw4wsuxqa45e8l'
@@ -45,6 +46,15 @@ def setup_autograde_routes(app):
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+        
+    @app.route('/feedback', methods=['GET'])
+    def get_feedback():
+        db = get_db()
+        feedback_collection = db.feedback  # Adjust collection name as necessary
+        # Retrieve all feedback entries; exclude the '_id' field
+        feedback_data = list(feedback_collection.find({}, {'_id': 0}))
+        return jsonify(feedback_data)
+
 
 # Example usage with a Flask app
 # from flask import Flask
