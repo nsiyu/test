@@ -10,7 +10,21 @@ import {
 } from "@chakra-ui/react";
 
 function Chat() {
-  const [messages, setMessages] = useState([]);
+  // Initialize the messages state with a welcome message from the AI
+  const [messages, setMessages] = useState([
+    {
+      text: "Hi, I am your ai tutor, try to ask me anything about this lecture",
+      sender: "ai",
+    },
+    {
+      text: "why is Dynamic programming important",
+      sender: "user",
+    },
+    {
+      text: "Dynamic programming optimizes complex problems by breaking them into simpler subproblems.",
+      sender: "ai",
+    },
+  ]);
   const [input, setInput] = useState("");
   const endOfMessagesRef = useRef(null);
 
@@ -18,8 +32,8 @@ function Chat() {
     if (input.trim() !== "") {
       setMessages([...messages, { text: input, sender: "user" }]);
       setInput("");
-      // Simulate AI response
       setTimeout(() => {
+        // AI generates a response
         setMessages((messages) => [
           ...messages,
           { text: "AI Response to: " + input, sender: "ai" },
@@ -48,7 +62,7 @@ function Chat() {
       <VStack
         spacing={4}
         align="stretch"
-        h="calc(100% - 100px)" // Adjusted for header and input area
+        h="calc(100% - 100px)"
         overflowY="auto"
         px={4}
       >
@@ -59,8 +73,8 @@ function Chat() {
             p={3}
             bg={message.sender === "user" ? "blue.100" : "gray.100"}
             color={message.sender === "user" ? "gray.800" : "black"}
-            borderRadius="xl" // Rounded corners for a softer look
-            maxW="70%"
+            borderRadius="xl"
+            maxW={"70%"}
           >
             <Text>{message.text}</Text>
           </Box>
@@ -76,7 +90,7 @@ function Chat() {
         justify="space-between"
         p={3}
         borderTopWidth="1px"
-        borderColor="gray.200" // Light border for subtle separation
+        borderColor="gray.200"
       >
         <Input
           placeholder="Type your message"

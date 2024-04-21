@@ -120,6 +120,7 @@ function Schedule() {
             borderColor="gray.200"
             borderRadius="md"
             height="120px"
+            overflowY="auto"
             _hover={{
               bg: hoverBgColor,
               transform: "scale(1.02)",
@@ -136,12 +137,19 @@ function Schedule() {
                   new Date(task.date).getDate() === day
               )
               .map((task) => (
-                <Box bg={"pink"} borderRadius={"0.3em"} p={0.1} pb={1.5} pl={1} mb={1}>
-                    <Tooltip label={task.name} aria-label="A tooltip">
-                      <Text isTruncated maxW="120px" mt={1} fontSize={"xs"}>
-                        {task.name}
-                      </Text>
-                    </Tooltip>
+                <Box
+                  bg={"pink"}
+                  borderRadius={"0.3em"}
+                  p={0.1}
+                  pb={1.5}
+                  pl={1}
+                  mb={1}
+                >
+                  <Tooltip label={task.name} aria-label="A tooltip">
+                    <Text isTruncated maxW="120px" mt={1} fontSize={"xs"}>
+                      {task.name}
+                    </Text>
+                  </Tooltip>
                 </Box>
               ))}
           </GridItem>
