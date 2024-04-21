@@ -100,10 +100,10 @@ function App() {
       <Flex>
         <VStack w="80%" spacing={8}>
           {showVideo && (
-            <AspectRatio ratio={16 / 9} w="full">
+            <AspectRatio ratio={4 / 3} w="full">
               <ReactPlayer
-                url="https://www.youtube.com/watch?v=xuP4g7IDgDM&ab_channel=NatureBlogs"
-                width="100%"
+                url="https://storage.googleapis.com/klap-renders/f6b71095-2a6d-4d7a-8b42-336e204c8ee7-cea9f61f-309d-4274-a7db-945b6a2f3305.mp4 "
+                width="120%%"
                 height="500px"
                 onEnded={handleVideoEnd}
               />
