@@ -22,7 +22,7 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import { FaRobot, FaQuestionCircle, FaMoon, FaSun, FaUpload } from "react-icons/fa";
+import { FaRobot, FaQuestionCircle, FaMoon, FaSun, FaUpload, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 
@@ -63,44 +63,22 @@ const StudyPlan = () => {
 
   const renderIcons = (topicId) => {
     if (uploadedVideos[topicId]) {
+      // Show play icon if video is uploaded
       return (
-        <>
-          <Tooltip label="Quiz Yourself" hasArrow>
-            <IconButton
-              icon={<FaQuestionCircle />}
-              aria-label="Quiz Yourself"
-              bg={theme.colors.primary}
-              _hover={{ bg: theme.colors.primaryDark }}
-              onClick={() =>
-                console.log("Quiz clicked for topic:", topics[topicId].name)
-              }
-            />
-          </Tooltip>
-          <Tooltip label="AI Tutor" hasArrow>
-            <IconButton
-              icon={<FaRobot />}
-              aria-label="AI Tutor"
-              bg={theme.colors.primary}
-              _hover={{ bg: theme.colors.primaryDark }}
-              onClick={() =>
-                console.log("AI Tutor clicked for topic:", topics[topicId].name)
-              }
-            />
-          </Tooltip>
-          <Tooltip label="Gamified Content" hasArrow>
-            <IconButton
-              icon={<FaRobot />}
-              aria-label="Gamified Content"
-              bg={theme.colors.primary}
-              _hover={{ bg: theme.colors.primaryDark }}
-              onClick={() =>
-                console.log("Gamified Content clicked for topic:", topics[topicId].name)
-              }
-            />
-          </Tooltip>
-        </>
+        <Tooltip label="Play Video" hasArrow>
+          <IconButton
+            icon={<FaPlay />}
+            aria-label="Play Video"
+            bg={theme.colors.primary}
+            _hover={{ bg: theme.colors.primaryDark }}
+            onClick={() =>
+              console.log("Play video for topic:", topics[topicId].name)
+            }
+          />
+        </Tooltip>
       );
     } else {
+      // Show upload button if video is not uploaded
       return (
         <Tooltip label="Upload Video" hasArrow>
           <IconButton

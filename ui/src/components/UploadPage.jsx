@@ -1,80 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
-  Button,
-  Input,
+  Flex,
   Text,
   VStack,
-  HStack,
-  Container,
-  Heading,
-  SimpleGrid,
-  Progress,
-  List,
-  ListItem,
-  ListIcon,
-  Flex,
-  useToast,
+  useTheme,
+  Icon,
+  Center,
 } from "@chakra-ui/react";
-import { FaGoogleDrive, FaUpload } from "react-icons/fa";
-import { MdCheckCircle } from "react-icons/md";
-import Upload from "./Upload.jsx";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import Upload from "./Upload";
 
-function App() {
-  const [file, setFile] = useState(null);
-  const [extractedText, setExtractedText] = useState([]);
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleFileUpload = async () => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    fetch("http://localhost:3000/upload-pdf", {
-      method: "POST",
-      body: formData,
-      mode: "no-cors",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setExtractedText(data.text);
-      });
-  };
-
+const HomePage = () => {
+  const theme = useTheme();
   return (
-    <Container maxW="container.xl" p={4}>
-      <Flex direction="row" justify="space-between" align="start">
-        <VStack spacing={4} align="stretch" flex="1">
-          <Heading as="h1" size="md" mb={0}>
-            Upload Additional Notes
-          </Heading>
-          <Box w="full" p={4} borderWidth="1px" borderRadius="lg">
-            <VStack spacing={4}>
-              <HStack w="full" alignItems="center" spacing={4}></HStack>
-              <Upload></Upload>
-              {extractedText.length > 0 && (
-                <Box
-                  overflowY="auto"
-                  maxH="200px"
-                  p={4}
-                  mt={4}
-                  borderWidth="1px"
-                >
-                  {extractedText.map((pageText, index) => (
-                    <Text key={index} mb={2}>
-                      {pageText || "No text found on this page."}
-                    </Text>
-                  ))}
-                </Box>
-              )}
-            </VStack>
-          </Box>
-        </VStack>
-      </Flex>
-    </Container>
+    <Box bg={theme.colors.brand[50]} p={10}>
+      <VStack spacing={8} justifyContent="center" alignItems="center">
+        <Flex justifyContent="center" width="100%">
+          <Flex
+            direction="column"
+            align="center"
+            p={8}
+            bg={theme.colors.white}
+            boxShadow={theme.shadows.md}
+            rounded="xl"
+            transition="transform .2s, box-shadow .2s"
+            role="group"
+            w={"50vw"}
+          >
+            <Icon
+              as={AiOutlineCloudUpload}
+              w={16}
+              h={16}
+              color={theme.colors.brand[700]}
+            />
+            <Text mt={4} fontSize="2xl" fontWeight="bold">
+              Upload Syllabus
+            </Text>
+            <Text my={2}>Get your personalized learning path</Text>
+            <Upload />
+          </Flex>
+        </Flex>
+      </VStack>
+    </Box>
   );
-}
+};
 
-export default App;
+export default HomePage;
