@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import React, { useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -15,13 +14,9 @@ import {
   ListIcon,
   Flex,
   useToast,
-  Center,
   AspectRatio,
 } from "@chakra-ui/react";
 import { FaGoogleDrive, FaUpload } from "react-icons/fa";
-import { MdCheckCircle, MdReplay, MdForward } from "react-icons/md";
-import ReactPlayer from "react-player";
-import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
 import { MdCheckCircle, MdReplay, MdForward } from "react-icons/md";
 import ReactPlayer from "react-player";
 import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
@@ -33,18 +28,8 @@ function App() {
   const [showFlashcards, setShowFlashcards] = useState(false);
   const toast = useToast();
   const fileInputRef = useRef(null);
-  const [showVideo, setShowVideo] = useState(true);
-  const [showButtons, setShowButtons] = useState(false);
-  const [showFlashcards, setShowFlashcards] = useState(false);
-  const toast = useToast();
-  const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    setFile(file);
-    // Optionally trigger the upload function immediately after file selection
-    // handleFileUpload(file);
     const file = event.target.files[0];
     if (!file) return;
     setFile(file);
@@ -63,22 +48,9 @@ function App() {
       return;
     }
 
-    if (!file) {
-      toast({
-        title: "No file selected",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
     const formData = new FormData();
     formData.append("file", file);
 
-    // Assuming you have a server ready to receive the file at this endpoint
-    // Adjust the URL to your needs
-    fetch("http://localhost:3000/upload", {
     // Assuming you have a server ready to receive the file at this endpoint
     // Adjust the URL to your needs
     fetch("http://localhost:3000/upload", {
@@ -168,7 +140,12 @@ function App() {
             <Heading as="h3" size="md">
               AI Chat
             </Heading>
-            <VStack spacing={4} align="stretch" h="100%">
+            <VStack
+              spacing={4}
+              align="stretch"
+              h="100%"
+              justifyContent="space-between"
+            >
               {/* Placeholder text bubbles */}
               <Box
                 alignSelf="flex-start"
@@ -189,11 +166,11 @@ function App() {
                 <Text>delux</Text>
               </Box>
               {/* Input text box */}
-              <Box>
+              <Box mb={-120}>
                 <Input placeholder="Type your message" />
               </Box>
               {/* Send button */}
-              <Button size="sm" colorScheme="blue">
+              <Button size="sm" colorScheme="blue" mb={4}>
                 Send
               </Button>
             </VStack>
