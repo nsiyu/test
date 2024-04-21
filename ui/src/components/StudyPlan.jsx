@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Box,
   VStack,
@@ -22,34 +22,80 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import {
-  FaRobot,
-  FaQuestionCircle,
-  FaMoon,
-  FaSun,
-  FaUpload,
-  FaPlay,
-} from "react-icons/fa";
+import { FaMoon, FaSun, FaUpload, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
-import axios from "axios";
 
+const months = [
+  { num: 0, name: "January", days: 31 },
+  { num: 1, name: "February", days: 28 },
+  { num: 2, name: "March", days: 31 },
+  { num: 3, name: "April", days: 30 },
+  { num: 4, name: "May", days: 31 },
+  { num: 5, name: "June", days: 30 },
+  { num: 6, name: "July", days: 31 },
+  { num: 7, name: "August", days: 31 },
+  { num: 8, name: "September", days: 30 },
+  { num: 9, name: "October", days: 31 },
+  { num: 10, name: "November", days: 30 },
+  { num: 11, name: "December", days: 31 },
+];
+const monthAbbreviations = {
+  jan: "01",
+  feb: "02",
+  mar: "03",
+  apr: "04",
+  may: "05",
+  jun: "06",
+  jul: "07",
+  aug: "08",
+  sep: "09",
+  oct: "10",
+  nov: "11",
+  dec: "12",
+};
 const StudyPlan = () => {
+  const [calendarItems, setCalendarItems] = useState([]);
+
+  const convertFetchedDataToTasks = (data) =>
+    data.map((item, index) => ({
+      id: index + 1,
+      date: `2024-${
+        monthAbbreviations[item.date.toLowerCase()]
+      }-${item.day.padStart(2, "0")}`,
+      name: item.topic,
+    }));
+
+  const tasks = convertFetchedDataToTasks(calendarItems);
+  console.log(tasks);
+  useEffect(() => {
+    const fetchCalendarItems = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/get-calendar-items"
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setCalendarItems(data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchCalendarItems();
+  }, []);
+
   const { isAuthenticated } = useContext(AuthContext);
   const { colorMode, toggleColorMode } = useColorMode();
   const theme = useTheme();
   const navigate = useNavigate();
   const topics = [
     {
-      id: 1,
       name: "React Basics",
-      description: "Learn the basics of React.",
       finishTime: "5:10",
     },
     {
-      id: 2,
       name: "Chakra UI",
-      description: "Learn to style apps with Chakra UI.",
       finishTime: "10:50",
     },
     // Additional topics...
@@ -60,27 +106,15 @@ const StudyPlan = () => {
   const [selectedTopicId, setSelectedTopicId] = useState(null);
   const [videoLink, setVideoLink] = useState("");
 
-  const handleUpload = async (topicId, link) => {
-    if (link) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/generate-short",
-          {
-            source_video_url: link,
-          }
-        );
-        console.log("API Response:", response.data);
-        setUploadedVideos((prevVideos) => ({
-          ...prevVideos,
-          [topicId]: link,
-        }));
-        setIsOpen(false);
-        setVideoLink("");
-      } catch (error) {
-        console.error("API Call Failed:", error);
-      }
-    }
+  const handleUpload = (topicId, link) => {
+    setUploadedVideos((prevVideos) => ({
+      ...prevVideos,
+      [topicId]: link,
+    }));
+    setIsOpen(false);
+    setVideoLink("");
   };
+
   const renderIcons = (topicId) => {
     if (uploadedVideos[topicId]) {
       // Show play icon if video is uploaded
@@ -144,9 +178,9 @@ const StudyPlan = () => {
           size="lg"
         />
       </HStack>
-      {topics.map((topic) => (
+      {tasks.map((task, index) => (
         <Box
-          key={topic.id}
+          key={index}
           p={5}
           shadow="xl"
           borderWidth="1px"
@@ -156,16 +190,21 @@ const StudyPlan = () => {
           alignItems="center"
           bg={useColorModeValue("white", "gray.700")}
           transition="background 0.3s"
+          onClick={() => {
+            navigate("/contentpage");
+          }}
+          _hover={{ cursor: "pointer" }}
         >
           <VStack align="start" spacing={1}>
             <Text fontWeight="bold" fontSize="lg">
-              {topic.name}
+              {task.name}
             </Text>
-            <Text fontSize="sm">Expected time: {topic.finishTime}</Text>
+            <Text fontSize="sm">Expected time: {task.date}</Text>
           </VStack>
-          <HStack spacing={2}>{renderIcons(topic.id)}</HStack>
+          <HStack spacing={2}>{renderIcons(task.id)}</HStack>
         </Box>
       ))}
+
       {/* Video Upload Modal */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />

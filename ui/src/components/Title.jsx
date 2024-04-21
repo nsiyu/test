@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Text } from "@chakra-ui/react";
 
 const Title = () => {
-  const words = ["Lecture.", "Syllabus.", "Textbook.", "Notes."];
+  const words = ["Lecture.", ";alijgf;iajf;oiasjiopewajciofjweaciofwoafocewcaopmwaeijmfwpoajcifopv oiaoiwpireowacepoiroweuacr uoeiwcauorpouaiwoemcru umowiaecumro.", "Textbook.", "Notes."];
   const [index, setIndex] = useState(0); // Current index for the words array
   const [subIndex, setSubIndex] = useState(0); // Current index for the substring of the word
   const [isDeleting, setIsDeleting] = useState(false); // State to track whether currently deleting

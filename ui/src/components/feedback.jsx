@@ -17,8 +17,9 @@ import {
 } from "@chakra-ui/react";
 import Confetti from "react-confetti";
 import { FaAngleDown, FaChevronRight } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
 const QuizFeedback = () => {
+  const navigate = useNavigate
   // Placeholder data for the quiz
   const quizData = [
     {
