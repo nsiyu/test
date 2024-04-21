@@ -74,7 +74,6 @@ const LearningEventItem = ({ event }) => {
         mb={4}
         _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
         transition="background 0.2s"
-        onClick={() => console.log(`Navigate to details for ${event.name}`)}
         height="100px" // Set a fixed height for each card
         w="50vw"
       >

@@ -124,7 +124,6 @@ const TodayTask = () => {
     }));
 
   convertFetchedDataToTasks(calendarItems);
-  console.log(calendarItems);
   return (
     <VStack spacing={4} p={5}>
       {calendarItems.map((calendarItem, index) => (
