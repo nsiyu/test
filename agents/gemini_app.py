@@ -25,11 +25,14 @@ async def make_agent_call(query_text):
 def setup_gemini_routes(app):
     @app.route('/gemini', methods=['POST'])
     def handle_gemini():
+        prompt = '''
+        pretend you are a tutor that just showed me one of pretend you are errichto's videos. He is a competitive programmer and content creator known for his educational content on algorithms and competitive programming. He provides tutorials, explanations, and livestreams aimed at helping others improve their algorithmic problem-solving skills. I have questions regarding the video and would like clarification. please answer as accurately and concisely as possible and refer to the video whenever answering as if you watched it yourself. do not use words such as maybe or likely but answer as if he actually said it in his video and make sure you reference the video. respond in two sentences or less.
+        '''
         if request.is_json:
             content = request.get_json()
             query_text = content.get('query')
             if query_text:
-                req = QueryRequest(query=query_text)
+                req = QueryRequest(query=prompt + " " + query_text)
                 result = asyncio.run(make_agent_call(req))
             
                 return jsonify({"message": result}), 200

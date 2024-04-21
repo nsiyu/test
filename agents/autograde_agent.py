@@ -42,10 +42,10 @@ async def startup(ctx: Context):
 async def query_handler(ctx: Context, sender: str, _query: AutoGradeRequest):
     ctx.logger.info("Query received")
     try:
-        prompt = "Based on the questions and answers below below, grade the question and give it an associated feedback. Format your response as 'Question|Result|Feedback' for each question and seperate then by | as well"
+        prompt = "Based on the questions and answers below below, grade the question and give it an associated feedback. Format your response as 'Question|Result|Feedback' for each question and seperate them by | as well"
         prompt += "\n".join(_query.query)
-        
         gemini_response = await make_agent_call(AutoGradeGeminiRequest(query=prompt)) 
+        print(gemini_response)
         db = get_db()
         entries = gemini_response.split('|')
 
