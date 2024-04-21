@@ -6,24 +6,14 @@ import {
   VStack,
   HStack,
   Container,
-  List,
-  ListItem,
-  ListIcon,
+  Center,
   Progress,
-  Badge,
-  extendTheme,
-  Icon,
 } from "@chakra-ui/react";
-import {
-  MdCheckCircle,
-  MdOutlineSchool,
-  MdWorkOutline,
-  MdSchool,
-} from "react-icons/md";
-import { FaChalkboardTeacher } from "react-icons/fa";
+import { MdWorkOutline } from "react-icons/md";
 import theme from "../theme";
 import TodayTask from "./TodayTask";
-import LearningEventsList from "./LearningEventList";
+import PieChart from "./PiChart";
+import DashboardCourse from "./DashboardCourse";
 
 function Dashboard() {
   const today = new Date().toISOString().slice(5, 10);
@@ -52,19 +42,9 @@ function Dashboard() {
                   bg="white"
                   borderWidth="1px"
                   borderColor="brand.300"
+                  w={"100%"}
                 >
-                  <Text
-                    mb={2}
-                    fontSize="lg"
-                    color="brand.700"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <MdWorkOutline size="1.25em" style={{ marginRight: 4 }} />
-                    Today's Tasks {today}
-                  </Text>
-                  <Progress colorScheme="pink" size="sm" value={66} mb={4} />
-                  <TodayTask></TodayTask>
+                  <DashboardCourse></DashboardCourse>
                 </Box>
                 <Box
                   flex={1}
@@ -74,50 +54,12 @@ function Dashboard() {
                   bg="white"
                   borderWidth="1px"
                   borderColor="brand.300"
+                  w={"100%"}
                 >
-                  <Text
-                    mb={2}
-                    fontSize="lg"
-                    color="brand.700"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <MdWorkOutline size="1.25em" style={{ marginRight: 4 }} />
-                    Today's Tasks {today}
-                  </Text>
-                  <Box
-                    w={["100%", "48%"]}
-                    h={["auto", "200%"]}
-                    p={4}
-                    rounded="lg"
-                    bg="white"
-                    shadow="lg"
-                    mb={4}
-                  >
-                    <HStack mb={4}>
-                      <Icon as={MdSchool} fontSize="xl" />
-                      <Text fontSize="xl" fontWeight="bold">
-                        Current Learning Plan
-                      </Text>
-                    </HStack>
-                    {currentLearningPlan.map((item, index) => (
-                      <Flex key={index} mb={2} alignItems="center">
-                        <Text mr={4}>{item.topic}</Text>
-                        <CircularProgress
-                          value={item.percentCompleted}
-                          size="40px"
-                          color="blue.400"
-                        >
-                          <CircularProgressLabel>
-                            {item.percentCompleted}%
-                          </CircularProgressLabel>
-                        </CircularProgress>
-                      </Flex>
-                    ))}{" "}
-                  </Box>
-                  ;
+                  <PieChart />
                 </Box>
               </VStack>
+
               <Box
                 flex={3}
                 p={4}
@@ -127,7 +69,20 @@ function Dashboard() {
                 borderWidth="1px"
                 borderColor="brand.300"
               >
-                <LearningEventsList></LearningEventsList>
+                <Center>
+                  <Text
+                    mb={2}
+                    fontSize="3xl"
+                    color="brand.700"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <MdWorkOutline size="1.25em" style={{ marginRight: 4 }} />
+                    Today's Tasks {today}
+                  </Text>
+                </Center>
+
+                <TodayTask></TodayTask>
               </Box>
             </HStack>
           </VStack>

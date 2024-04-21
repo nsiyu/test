@@ -1,10 +1,77 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { Box, VStack, Heading, Text, Container } from "@chakra-ui/react";
-import theme from "../theme";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Flex,
+  Text,
+  Progress,
+  Badge,
+  VStack,
+  useColorModeValue,
+  Icon,
+  Tooltip,
+  ScaleFade,
+} from "@chakra-ui/react";
+import { MdSchool, MdFilterList } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+
+const LearningEventItem = ({ event, progress, estimateTime }) => {
+  const bgColor = useColorModeValue("white", "gray.800");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const navigate = useNavigate();
+
+  const taskStatus = progress == 100 ? "Completed" : "In Progress";
+  return (
+    <ScaleFade
+      initialScale={0.1}
+      in={true}
+      onClick={() => {
+        navigate("/contentpage");
+      }}
+    >
+      <Flex
+        as="button"
+        direction={{ base: "column", sm: "row" }}
+        align="center"
+        justify="space-between"
+        p={4}
+        shadow="md"
+        borderWidth="1px"
+        borderColor={borderColor}
+        bg={bgColor}
+        borderRadius="lg"
+        mb={4}
+        _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
+        transition="background 0.2s"
+        height="100px" // Set a fixed height for each card
+        w="50vw"
+      >
+        <Icon as={MdSchool} w={8} h={8} color="blue.500" />
+        <Box flex="1" ml={4}>
+          <Text fontWeight="bold" fontSize="lg">
+            {event.topic}
+          </Text>
+          <Text fontSize="sm">{event.description}</Text>
+          <Progress colorScheme="blue" size="sm" value={progress} />
+        </Box>
+        <Box>
+          <Tooltip label={`${taskStatus} - Click for more info`} hasArrow>
+            <Badge
+              colorScheme={taskStatus === "Completed" ? "green" : "orange"}
+            >
+              {taskStatus}
+            </Badge>
+          </Tooltip>
+          <Badge
+            colorScheme="purple"
+            ml={2}
+          >{`${estimateTime} remaining`}</Badge>
+        </Box>
+      </Flex>
+    </ScaleFade>
+  );
+};
 
 const TodayTask = () => {
-  const { colors, shadows, radii } = theme;
   const [calendarItems, setCalendarItems] = useState([]);
   const monthMapping = {
     jan: "01",
@@ -20,7 +87,6 @@ const TodayTask = () => {
     nov: "11",
     dec: "12",
   };
-
   useEffect(() => {
     const fetchCalendarItems = async () => {
       try {
@@ -46,25 +112,33 @@ const TodayTask = () => {
     fetchCalendarItems();
   }, []);
 
+  const convertFetchedDataToTasks = (data) =>
+    data.map((item, index) => ({
+      id: index + 1,
+      topic: item.topic,
+      progress: Math.floor(Math.random() * 21) * 5, // Generates 0, 5, 10, ..., 95, 100
+      estimatedTime: `${String(Math.floor(Math.random() * 24)).padStart(
+        2,
+        "0"
+      )}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`, // Generates time in HH:MM format
+    }));
+
+  convertFetchedDataToTasks(calendarItems);
+  console.log(calendarItems);
   return (
-    <Container maxW="container.xl" p="6">
-      <VStack spacing={5} align="stretch">
-        {calendarItems.map((task, index) => (
-          <Box
-            key={index}
-            bg={colors.backgroundLight || "gray.50"}
-            shadow={shadows.md}
-            rounded={radii.md}
-            p={6}
-            mb={4}
-          >
-            <Text color={colors.text || "gray.600"} fontSize="md">
-              {task.topic}
-            </Text>
-          </Box>
-        ))}
-      </VStack>
-    </Container>
+    <VStack spacing={4} p={5}>
+      {calendarItems.map((calendarItem, index) => (
+        <LearningEventItem
+          key={index}
+          event={calendarItem}
+          progress={Math.floor(Math.random() * 21) * 5}
+          estimateTime={`${String(Math.floor(Math.random() * 24)).padStart(
+            2,
+            "0"
+          )}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`}
+        />
+      ))}
+    </VStack>
   );
 };
 

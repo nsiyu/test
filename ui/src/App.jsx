@@ -18,6 +18,7 @@ import UploadPage from "./components/UploadPage.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import Title from "./components/Title.jsx";
 
+
 function App() {
   return (
     <ChakraProvider theme={theme}>

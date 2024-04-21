@@ -65,39 +65,23 @@ const LearningEventItem = ({ event }) => {
         direction={{ base: "column", sm: "row" }}
         align="center"
         justify="space-between"
-        p={4}
+        p={2}
         shadow="md"
         borderWidth="1px"
         borderColor={borderColor}
         bg={bgColor}
         borderRadius="lg"
-        mb={4}
+        mb={2}
         _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
         transition="background 0.2s"
         onClick={() => console.log(`Navigate to details for ${event.name}`)}
-        height="100px" // Set a fixed height for each card
-        w="50vw"
+        // Set a fixed height for each card
       >
-        <Icon as={MdSchool} w={8} h={8} color="blue.500" />
-        <Box flex="1" ml={4}>
-          <Text fontWeight="bold" fontSize="lg">
+        <Icon as={MdSchool} h={8} color="blue.500" />
+        <Box flex="1" ml={1} w={"15vw"}>
+          <Text fontWeight="bold" fontSize="md">
             {event.name}
           </Text>
-          <Text fontSize="sm">{event.description}</Text>
-          <Progress colorScheme="blue" size="sm" value={event.progress} />
-        </Box>
-        <Box>
-          <Tooltip label={`${event.status} - Click for more info`} hasArrow>
-            <Badge
-              colorScheme={event.status === "Completed" ? "green" : "orange"}
-            >
-              {event.status}
-            </Badge>
-          </Tooltip>
-          <Badge
-            colorScheme="purple"
-            ml={2}
-          >{`${event.interactions} remaining`}</Badge>
         </Box>
       </Flex>
     </ScaleFade>
@@ -132,7 +116,7 @@ const LearningEventsList = () => {
   };
 
   return (
-    <VStack spacing={4} p={5}>
+    <VStack spacing={1} p={2}>
       <Flex w="full" justify="space-between" align="center">
         <Text
           mb={2}
@@ -144,27 +128,8 @@ const LearningEventsList = () => {
           <FaChalkboardTeacher size="1.25em" style={{ marginRight: 4 }} />
           Courses
         </Text>
-        <Box>
-          <Button
-            leftIcon={<MdFilterList />}
-            colorScheme="teal"
-            onClick={() => setEvents(eventsData)}
-          >
-            Reset Filters
-          </Button>
-        </Box>
       </Flex>
-      <Flex mb={4}>
-        <Input
-          placeholder="Filter by class name..."
-          value={filter}
-          onChange={handleFilterChange}
-        />
-        <Select ml={2} onChange={(e) => setSortType(e.target.value)}>
-          <option value="name">Sort by Name</option>
-          <option value="progress">Sort by Progress</option>
-        </Select>
-      </Flex>
+
       {events.map((event, index) => (
         <LearningEventItem key={index} event={event} />
       ))}
