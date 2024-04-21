@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -21,6 +22,9 @@ import { FaGoogleDrive, FaUpload } from "react-icons/fa";
 import { MdCheckCircle, MdReplay, MdForward } from "react-icons/md";
 import ReactPlayer from "react-player";
 import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
+import { MdCheckCircle, MdReplay, MdForward } from "react-icons/md";
+import ReactPlayer from "react-player";
+import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
 
 function App() {
   const [file, setFile] = useState(null);
@@ -29,8 +33,18 @@ function App() {
   const [showFlashcards, setShowFlashcards] = useState(false);
   const toast = useToast();
   const fileInputRef = useRef(null);
+  const [showVideo, setShowVideo] = useState(true);
+  const [showButtons, setShowButtons] = useState(false);
+  const [showFlashcards, setShowFlashcards] = useState(false);
+  const toast = useToast();
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    setFile(file);
+    // Optionally trigger the upload function immediately after file selection
+    // handleFileUpload(file);
     const file = event.target.files[0];
     if (!file) return;
     setFile(file);
@@ -49,9 +63,22 @@ function App() {
       return;
     }
 
+    if (!file) {
+      toast({
+        title: "No file selected",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
+    // Assuming you have a server ready to receive the file at this endpoint
+    // Adjust the URL to your needs
+    fetch("http://localhost:3000/upload", {
     // Assuming you have a server ready to receive the file at this endpoint
     // Adjust the URL to your needs
     fetch("http://localhost:3000/upload", {
@@ -174,6 +201,26 @@ function App() {
         </VStack>
       </Flex>
     </Container>
+  );
+}
+
+function FeatureBox({ icon, title, onClick }) {
+  return (
+    <Button
+      p={4}
+      borderWidth="1px"
+      borderRadius="lg"
+      w="full"
+      h="100px" // Making these smaller as per your earlier request
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      onClick={onClick}
+    >
+      <Text fontSize="xl">{icon}</Text>
+      <Text>{title}</Text>
+    </Button>
   );
 }
 
