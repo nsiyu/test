@@ -25,20 +25,56 @@ const QuizFeedback = () => {
 
   const quizData = [
     {
-      question: "What is the capital of France?",
+      question:
+        "What are the advantages of using the iterative method for dynamic programming?",
       correctAnswer: "Paris",
       explanation: "Paris is the capital of France.",
       correct: "correct",
+      userAnswer:
+        "A recursive method for dynamic programming is advantageous because it uses less memory than iterative solutions.",
     },
     {
-      question: "Who wrote 'To Kill a Mockingbird'?",
+      question:
+        "What is a disadvantage of using the iterative method for dynamic programming?",
       correctAnswer: "Harper Lee",
       explanation: "Harper Lee wrote 'To Kill a Mockingbird'.",
+      correct: "correct",
+      userAnswer:
+        "A disadvantage of using the iterative method for dynamic programming is that it can be less intuitive and harder to conceptualize than the recursive approach, especially for complex problems.",
+    },
+    {
+      question:
+        "What is a advantage of using the recursive method for dynamic programming?",
+      correctAnswer:
+        "A major advantage of using the recursive method for dynamic programming is its intuitive breakdown of complex problems into simpler subproblems, enhancing code clarity and reducing redundant calculations with memoization.",
+      explanation:
+        "is incorrect because recursive solutions can actually use more memory due to the overhead of maintaining a call stack. Each recursive call adds a layer to the stack, leading to higher memory usage compared to iterative solutions, which typically use loops and a limited number of variables for more efficient memory management",
+      correct:
+        "NO",
+      userAnswer:
+        "A recursive method for dynamic programming is advantageous because it uses less memory than iterative solutions.",
+    },
+    {
+      question:
+        "What are the disadvantages of using the recursive method for dynamic programming?",
+      correctAnswer: "Harper Lee",
+      explanation: "Harper Lee wrote 'To Kill a Mockingbird'.",
+      correct: "correct",
+      userAnswer:
+        "A recursive method for dynamic programming is advantageous because it uses less memory than iterative solutions.",
+    },
+    {
+      question:
+        "Is the order of states visited important when using the iterative method?",
+      correctAnswer:
+        "Yes, the order of states visited is important when using the iterative method in dynamic programming. In the bottom-up approach, you must solve smaller subproblems first to ensure that their solutions are available when solving larger, dependent subproblems. ",
+      explanation:
+        "This is incorrect because the order is crucial; the iterative approach requires solving smaller subproblems first. Visiting states out of order can lead to solving problems before their dependencies are resolved, resulting in incorrect or inefficient solutions.",
       correct: "no",
+      userAnswer:
+        "No, the order of states visited is not important when using the iterative method in dynamic programming",
     },
   ];
-
-  const userAnswers = ["Paris", "J.K. Rowling"];
 
   const themeColor = useColorModeValue("primary", "primaryDark");
   const [reviewedQuestions, setReviewedQuestions] = useState(
@@ -114,7 +150,7 @@ const QuizFeedback = () => {
                 <Text color={question.correct == "correct" ? "green" : "red"}>
                   Your Answer:{" "}
                   <Text as="spin" color={"black"}>
-                    {userAnswers[index]}
+                    {question.userAnswer}
                   </Text>
                 </Text>
                 {question.correct == "correct" ? (

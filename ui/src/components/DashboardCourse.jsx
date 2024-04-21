@@ -45,7 +45,6 @@ const eventsData = [
     status: "In Progress",
     interactions: "16:50",
   },
-  // More sample events
 ];
 
 const LearningEventItem = ({ event }) => {
