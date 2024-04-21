@@ -3,35 +3,39 @@ import { Button, Spinner, useToast, Box, Text, Center } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const FileUploadButton = () => {
-  const [file, setFile] = useState(null);
   const [buttonState, setButtonState] = useState("upload"); // States: 'upload', 'submit', 'loading', 'continue'
-  const toast = useToast();
   const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+  const [extractedText, setExtractedText] = useState([]);
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    setFile(event.target.files[0]);
     setButtonState("submit");
   };
 
-  const handleSubmit = () => {
-    if (!file) {
-      toast({
-        title: "No file selected",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("http://localhost:3000/upload-pdf", {
+      method: "POST",
+      body: formData,
+      mode: "no-cors",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setExtractedText(data.text);
+        console.log(data.text);
       });
-      return;
-    }
     setButtonState("loading");
     setTimeout(() => {
       setButtonState("continue");
-    }, 2000); // Simulate file processing time
+    }, 1000);
+    console.log(extractedText);
   };
 
   const handleContinue = () => {
-    navigate('/userinfo')
+    navigate("/userinfo");
   };
 
   return (
@@ -46,7 +50,7 @@ const FileUploadButton = () => {
           />
           <label htmlFor="file-upload">
             <Button as="span" colorScheme="teal">
-              Upload File
+              Upload PDF
             </Button>
           </label>
         </>

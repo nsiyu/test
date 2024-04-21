@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -6,17 +6,10 @@ import {
   Grid,
   GridItem,
   Text,
+  Tooltip,
   useColorModeValue,
+  Badge,
 } from "@chakra-ui/react";
-
-const tasks = [
-  { id: 1, date: "2024-04-01", name: "Project kickoff" },
-  { id: 2, date: "2024-05-03", name: "Design review" },
-  { id: 3, date: "2024-06-10", name: "Stakeholder meeting" },
-  { id: 4, date: "2024-07-15", name: "Mid-month report" },
-  { id: 5, date: "2024-08-20", name: "Team outing" },
-  { id: 6, date: "2024-09-30", name: "Project wrap-up" },
-];
 
 const months = [
   { num: 0, name: "January", days: 31 },
@@ -32,11 +25,54 @@ const months = [
   { num: 10, name: "November", days: 30 },
   { num: 11, name: "December", days: 31 },
 ];
+const monthAbbreviations = {
+  jan: "01",
+  feb: "02",
+  mar: "03",
+  apr: "04",
+  may: "05",
+  jun: "06",
+  jul: "07",
+  aug: "08",
+  sep: "09",
+  oct: "10",
+  nov: "11",
+  dec: "12",
+};
 
 function Schedule() {
   const [selectedMonthIndex, setSelectedMonthIndex] = useState(
     new Date().getMonth()
   );
+  const [calendarItems, setCalendarItems] = useState([]);
+
+  const convertFetchedDataToTasks = (data) =>
+    data.map((item, index) => ({
+      id: index + 1,
+      date: `2024-${
+        monthAbbreviations[item.date.toLowerCase()]
+      }-${item.day.padStart(2, "0")}`,
+      name: item.topic,
+    }));
+
+  const tasks = convertFetchedDataToTasks(calendarItems);
+
+  useEffect(() => {
+    const fetchCalendarItems = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/get-calendar-items"
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setCalendarItems(data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchCalendarItems();
+  }, []);
 
   const handleMonthChange = (event) => {
     setSelectedMonthIndex(parseInt(event.target.value, 10));
@@ -48,18 +84,18 @@ function Schedule() {
   return (
     <Box maxW="6xl" mx="auto" p={5} bg="white" boxShadow="xl" borderRadius="lg">
       <Box
-        mb={5}
         display="flex"
         justifyContent="space-between"
         alignItems="center"
+        mb={5}
       >
         <Heading as="h2" size="xl" color="gray.700">
           {months[selectedMonthIndex].name} Schedule
         </Heading>
         <Select
           onChange={handleMonthChange}
-          placeholder="Select month"
           value={selectedMonthIndex}
+          placeholder="Select month"
           borderColor="gray.600"
           color="gray.700"
           w="20%"
@@ -100,9 +136,13 @@ function Schedule() {
                   new Date(task.date).getDate() === day
               )
               .map((task) => (
-                <Text key={task.id} mt={1} fontSize="sm" color="gray.600">
-                  {task.name}
-                </Text>
+                <Box bg={"pink"} borderRadius={"0.3em"} p={0.1} pb={1.5} pl={1}>
+                    <Tooltip label={task.name} aria-label="A tooltip">
+                      <Text isTruncated maxW="120px" mt={1} fontSize={"xs"}>
+                        {task.name}
+                      </Text>
+                    </Tooltip>
+                </Box>
               ))}
           </GridItem>
         ))}
