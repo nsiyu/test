@@ -17,8 +17,7 @@ import Feedback from "./components/feedback";
 import UploadPage from "./components/UploadPage.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import Title from "./components/Title.jsx";
-
-
+import QuizPage from "./components/QuizPage.jsx";
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -33,10 +32,12 @@ function App() {
           <Route path="/UserInfo" element={<EducationForm />} />
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
-          <Route path="/" element={<ContentPage />}/>
+          <Route path="/" element={<ContentPage />} />
           <Route path="/uploadpage" element={<FileUploadPage />} />
           <Route path="/upload" element={<UploadPage />} />
           <Route path="/title" element={<Title></Title>} />
+          <Route path="/feedback" element={<Feedback></Feedback>} />
+          <Route path="/quizPage" element={<QuizPage></QuizPage>} />
           <Route index element={<Dashboard />} />
         </Routes>
       </AuthProvider>

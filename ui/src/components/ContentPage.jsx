@@ -16,11 +16,14 @@ import ReactPlayer from "react-player";
 import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
 import Typing from "./Typing"; // Assuming Typing component is in a separate file
 import ChatBot from "./ChatBot.jsx";
+import { useNavigate } from "react-router-dom";
 function App() {
   const [showVideo, setShowVideo] = useState(true);
   const [showButtons, setShowButtons] = useState(false);
   const [showFlashcards, setShowFlashcards] = useState(false);
   const toast = useToast();
+  const [showNotes, setShowNotes] = useState(false);
+  const navigate = useNavigate();
 
   const handleVideoEnd = () => {
     setShowVideo(false);
@@ -34,7 +37,7 @@ function App() {
   };
 
   const handleMoveOn = () => {
-    // Redirect the user to the quiz page
+    navigate("/quizpage");
   };
 
   // Aspect ratio of the video (16:9)
@@ -88,12 +91,19 @@ function App() {
           </HStack>
         </Flex>
         {/* Notes with typing */}
-        <VStack w="100%" align="stretch">
+        <VStack w="100%" align="stretch" mt={"2em"}>
           <Box p={4} borderWidth="1px" borderRadius="lg" w="90%">
-            <Heading as="h3" size="md" mb={2}>
-              Notes
-            </Heading>
-            <Typing />
+            <Button onClick={() => setShowNotes(!showNotes)}>Show Notes</Button>
+            {showNotes && (
+              <VStack w="100%" align="stretch">
+                <Box p={4} borderWidth="1px" borderRadius="lg" w="90%">
+                  <Heading as="h3" size="md" mb={2}>
+                    Notes
+                  </Heading>
+                  <Typing />
+                </Box>
+              </VStack>
+            )}
           </Box>
         </VStack>
       </Flex>
