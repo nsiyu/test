@@ -1,7 +1,28 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Box, VStack, Heading, Text, Container } from "@chakra-ui/react";
-import theme from "../../theme"; // Ensure this imports correctly to use its values
+import {
+  Box,
+  VStack,
+  Heading,
+  Text,
+  Container,
+  useTheme,
+} from "@chakra-ui/react";
+import theme from "../theme"; // Ensure this imports correctly to use its values
+
+const tasks = [
+  {
+    date: "2024-04-20",
+    description: "Complete the quarterly financial report.",
+  },
+  {
+    date: "2024-04-22",
+    description:
+      "Meet with the project team to discuss the new project launch.",
+  },
+  { date: "2024-04-25", description: "Presentation to potential investors." },
+  { date: "2024-04-25", description: "Team outing at local park." },
+];
 
 const TaskList = () => {
   const { colors, shadows, radii } = theme; // Using values directly from imported theme
