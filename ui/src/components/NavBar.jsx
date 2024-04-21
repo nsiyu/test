@@ -20,6 +20,7 @@ import {
   FiZap,
   FiUser,
   FiBookOpen,
+  FiUpload,
 } from "react-icons/fi"; // Import FiBookOpen icon
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
@@ -80,6 +81,15 @@ const Navbar = () => {
               Calendar
             </Button>
             <Button
+              leftIcon={<Icon as={FiUpload} color={iconColor} />}
+              variant="ghost"
+              onClick={() => navigate("/Upload")}
+              _hover={{ bg: buttonHoverBg }}
+            >
+              Upload
+            </Button>
+
+            <Button
               leftIcon={<Icon as={FiBookOpen} color={iconColor} />}
               variant="ghost"
               onClick={() => navigate("/courses")}
@@ -87,7 +97,6 @@ const Navbar = () => {
             >
               My Courses
             </Button>
-
             {/* Profile Dropdown */}
             <Menu>
               <MenuButton

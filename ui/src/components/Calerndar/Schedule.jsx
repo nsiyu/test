@@ -136,7 +136,7 @@ function Schedule() {
                   new Date(task.date).getDate() === day
               )
               .map((task) => (
-                <Box bg={"pink"} borderRadius={"0.3em"} p={0.1} pb={1.5} pl={1}>
+                <Box bg={"pink"} borderRadius={"0.3em"} p={0.1} pb={1.5} pl={1} mb={1}>
                     <Tooltip label={task.name} aria-label="A tooltip">
                       <Text isTruncated maxW="120px" mt={1} fontSize={"xs"}>
                         {task.name}

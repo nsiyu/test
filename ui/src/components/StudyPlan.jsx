@@ -22,9 +22,16 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import { FaRobot, FaQuestionCircle, FaMoon, FaSun, FaUpload } from "react-icons/fa";
+import {
+  FaRobot,
+  FaQuestionCircle,
+  FaMoon,
+  FaSun,
+  FaUpload,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
+import axios from "axios";
 
 const StudyPlan = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -50,15 +57,28 @@ const StudyPlan = () => {
   const [uploadedVideos, setUploadedVideos] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTopicId, setSelectedTopicId] = useState(null);
-  const [videoLink, setVideoLink] = useState('');
+  const [videoLink, setVideoLink] = useState("");
 
-  const handleUpload = (topicId, link) => {
-    setUploadedVideos((prevVideos) => ({
-      ...prevVideos,
-      [topicId]: link,
-    }));
-    setIsOpen(false);
-    setVideoLink('');
+  const handleUpload = async (topicId, link) => {
+    if (link) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/generate-short",
+          {
+            source_video_url: link,
+          }
+        );
+        console.log("API Response:", response.data);
+        setUploadedVideos((prevVideos) => ({
+          ...prevVideos,
+          [topicId]: link,
+        }));
+        setIsOpen(false);
+        setVideoLink("");
+      } catch (error) {
+        console.error("API Call Failed:", error);
+      }
+    }
   };
 
   const renderIcons = (topicId) => {
@@ -94,7 +114,10 @@ const StudyPlan = () => {
               bg={theme.colors.primary}
               _hover={{ bg: theme.colors.primaryDark }}
               onClick={() =>
-                console.log("Gamified Content clicked for topic:", topics[topicId].name)
+                console.log(
+                  "Gamified Content clicked for topic:",
+                  topics[topicId].name
+                )
               }
             />
           </Tooltip>
@@ -158,6 +181,9 @@ const StudyPlan = () => {
           alignItems="center"
           bg={useColorModeValue("white", "gray.700")}
           transition="background 0.3s"
+          onClick={() => {
+            navigate("/contentpage");
+          }}
         >
           <VStack align="start" spacing={1}>
             <Text fontWeight="bold" fontSize="lg">
@@ -165,12 +191,9 @@ const StudyPlan = () => {
             </Text>
             <Text fontSize="sm">Expected time: {topic.finishTime}</Text>
           </VStack>
-          <HStack spacing={2}>
-            {renderIcons(topic.id)}
-          </HStack>
+          <HStack spacing={2}>{renderIcons(topic.id)}</HStack>
         </Box>
       ))}
-      {/* Video Upload Modal */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
         <ModalContent>
@@ -187,10 +210,16 @@ const StudyPlan = () => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => handleUpload(selectedTopicId, videoLink)}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => handleUpload(selectedTopicId, videoLink)}
+            >
               Upload
             </Button>
-            <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button variant="ghost" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

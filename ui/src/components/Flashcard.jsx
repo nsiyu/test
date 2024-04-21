@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
-import { Box, Button, VStack, Text, Container, Heading, SimpleGrid } from '@chakra-ui/react';
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  VStack,
+  Text,
+  Container,
+  Heading,
+  SimpleGrid,
+} from "@chakra-ui/react";
 
 const flashcardsData = [
-  { term: "React", definition: "A JavaScript library for building user interfaces." },
-  { term: "Chakra UI", definition: "A simple, modular and accessible component library that gives you the building blocks you need to build your React applications." },
-  { term: "Node.js", definition: "A JavaScript runtime built on Chrome's V8 JavaScript engine." }
+  {
+    term: "React",
+    definition: "A JavaScript library for building user interfaces.",
+  },
+  {
+    term: "Chakra UI",
+    definition:
+      "A simple, modular and accessible component library that gives you the building blocks you need to build your React applications.",
+  },
+  {
+    term: "Node.js",
+    definition: "A JavaScript runtime built on Chrome's V8 JavaScript engine.",
+  },
 ];
 
 function Flashcard({ card, onClick }) {
@@ -27,13 +45,15 @@ function Flashcard({ card, onClick }) {
       cursor="pointer"
       boxShadow="md"
     >
-      <Text fontSize="2xl" fontWeight="bold">{showDefinition ? card.definition : card.term}</Text>
+      <Text fontSize="2xl" fontWeight="bold">
+        {showDefinition ? card.definition : card.term}
+      </Text>
     </Box>
   );
 }
 
 function Flashcards() {
-  const [viewMode, setViewMode] = useState('single');
+  const [viewMode, setViewMode] = useState("single");
   const [current, setCurrent] = useState(0);
 
   const handleNext = () => {
@@ -43,12 +63,16 @@ function Flashcards() {
   return (
     <Container maxW="container.xl" p={4} centerContent>
       <VStack spacing={8}>
-        <Heading as="h1" size="xl">Study Flashcards</Heading>
+        <Heading as="h1" size="xl">
+          Study Flashcards
+        </Heading>
 
-        {viewMode === 'single' ? (
+        {viewMode === "single" ? (
           <VStack spacing={4}>
             <Flashcard card={flashcardsData[current]} />
-            <Button colorScheme="teal" onClick={handleNext}>Next Card</Button>
+            <Button colorScheme="teal" onClick={handleNext}>
+              Next Card
+            </Button>
           </VStack>
         ) : (
           <SimpleGrid columns={[1, 2, 3]} spacing="20px">
