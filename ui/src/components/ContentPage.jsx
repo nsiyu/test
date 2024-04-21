@@ -49,7 +49,7 @@ function App() {
                 boxShadow="lg"
               >
                 <ReactPlayer
-                  url="https://storage.googleapis.com/klap-renders/f6b71095-2a6d-4d7a-8b42-336e204c8ee7-cea9f61f-309d-4274-a7db-945b6a2f3305.mp4"
+                  url="https://storage.googleapis.com/klap-renders/c785d3fe-66fe-473d-8945-8fccb87554ae-56ed2909-48d9-4392-bccf-86a4fb3d8123.mp4"
                   width="100%"
                   height="100%"
                   controls

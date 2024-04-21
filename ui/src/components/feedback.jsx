@@ -49,8 +49,7 @@ const QuizFeedback = () => {
         "A major advantage of using the recursive method for dynamic programming is its intuitive breakdown of complex problems into simpler subproblems, enhancing code clarity and reducing redundant calculations with memoization.",
       explanation:
         "is incorrect because recursive solutions can actually use more memory due to the overhead of maintaining a call stack. Each recursive call adds a layer to the stack, leading to higher memory usage compared to iterative solutions, which typically use loops and a limited number of variables for more efficient memory management",
-      correct:
-        "NO",
+      correct: "NO",
       userAnswer:
         "A recursive method for dynamic programming is advantageous because it uses less memory than iterative solutions.",
     },
@@ -169,7 +168,7 @@ const QuizFeedback = () => {
                     <Text color="red.500">Wrong...</Text>
                     <Text>Explanation: {question.explanation}</Text>
                     <ReactPlayer
-                      url="https://storage.googleapis.com/klap-renders/f6b71095-2a6d-4d7a-8b42-336e204c8ee7-cea9f61f-309d-4274-a7db-945b6a2f3305.mp4"
+                      url="https://storage.googleapis.com/klap-renders/c785d3fe-66fe-473d-8945-8fccb87554ae-56ed2909-48d9-4392-bccf-86a4fb3d8123.mp4"
                       controls
                       width={"40"}
                     />
