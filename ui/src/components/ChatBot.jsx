@@ -8,19 +8,12 @@ import {
   VStack,
   Heading,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 function Chat() {
   const [messages, setMessages] = useState([
     {
       text: "Hi, I am your ai tutor, you can ask me anything about this lecture",
-      sender: "ai",
-    },
-    {
-      text: "why is Dynamic programming important",
-      sender: "user",
-    },
-    {
-      text: "Dynamic programming optimizes complex problems by breaking them into simpler subproblems.",
       sender: "ai",
     },
   ]);
@@ -31,13 +24,32 @@ function Chat() {
     if (input.trim() !== "") {
       setMessages([...messages, { text: input, sender: "user" }]);
       setInput("");
-      setTimeout(() => {
-        // AI generates a response
-        setMessages((messages) => [
-          ...messages,
-          { text: "AI Response to: " + input, sender: "ai" },
-        ]);
-      }, 1000);
+
+      // Prepare the data to send
+      const requestData = {
+        query: input, // Assuming 'input' is what you want to send to the API
+      };
+
+      axios
+        .post("http://localhost:3000/gemini", requestData)
+        .then((response) => {
+          // Handle the response from the Flask API
+          const aiResponse = response.data.message;
+          console.log(messages); // Assuming the server sends back an object with a 'message' key
+          setMessages((messages) => [
+            ...messages,
+            { text: aiResponse, sender: "ai" },
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error when calling the API: ", error);
+          // Handle errors, e.g., by showing an error message
+
+          setMessages((messages) => [
+            ...messages,
+            { text: "Failed to get response from AI.", sender: "ai" },
+          ]);
+        });
     }
   };
 
