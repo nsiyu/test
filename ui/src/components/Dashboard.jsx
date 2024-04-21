@@ -1,88 +1,140 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import {
+  ChakraProvider,
   Box,
-  VStack,
-  Heading,
   Text,
+  VStack,
+  HStack,
   Container,
-  useTheme,
+  List,
+  ListItem,
+  ListIcon,
+  Progress,
+  Badge,
+  extendTheme,
+  Icon,
 } from "@chakra-ui/react";
-import theme from "../theme"; // Ensure this imports correctly to use its values
+import {
+  MdCheckCircle,
+  MdOutlineSchool,
+  MdWorkOutline,
+  MdSchool,
+} from "react-icons/md";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import theme from "../theme";
+import TodayTask from "./TodayTask";
+import LearningEventsList from "./LearningEventList";
 
-const tasks = [
-  {
-    date: "2024-04-20",
-    description: "Complete the quarterly financial report.",
-  },
-  {
-    date: "2024-04-22",
-    description:
-      "Meet with the project team to discuss the new project launch.",
-  },
-  { date: "2024-04-25", description: "Presentation to potential investors." },
-  { date: "2024-04-25", description: "Team outing at local park." },
-];
-
-const TaskList = () => {
-  const { colors, shadows, radii } = theme; // Using values directly from imported theme
-
-  // Function to format dates
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  const [calendarItems, setCalendarItems] = useState([]);
-  useEffect(() => {
-    const fetchCalendarItems = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/get-calendar-items"
-        );
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        setCalendarItems(data);
-        console.log(calendarItems);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-
-    fetchCalendarItems();
-  }, []);
+function Dashboard() {
+  const today = new Date().toISOString().slice(5, 10);
 
   return (
-    <Container maxW="container.xl" p="6">
-      <VStack spacing={5} align="stretch">
-        {calendarItems.map((task, index, arr) => (
-          <Box key={index}>
-            {index === 0 || arr[index - 1].date !== task.date ? (
-              <Heading
-                mt={8}
-                mb={4}
-                fontSize="xl"
-                color={colors.primary || "blue.800"}
+    <ChakraProvider theme={theme}>
+      <Box
+        p={5}
+        w="full"
+        minH="100vh"
+        bgGradient="linear(to-br, brand.50, brand.100)"
+        color="brand.900"
+      >
+        <Container maxW="container.xl" centerContent>
+          <VStack spacing={10} align="stretch" w="full">
+            <Text fontSize="3xl" textAlign="center">
+              Welcome back, Willy!
+            </Text>
+            <HStack spacing={10} align="stretch">
+              <VStack>
+                <Box
+                  flex={1}
+                  p={4}
+                  shadow="lg"
+                  rounded="lg"
+                  bg="white"
+                  borderWidth="1px"
+                  borderColor="brand.300"
+                >
+                  <Text
+                    mb={2}
+                    fontSize="lg"
+                    color="brand.700"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <MdWorkOutline size="1.25em" style={{ marginRight: 4 }} />
+                    Today's Tasks {today}
+                  </Text>
+                  <Progress colorScheme="pink" size="sm" value={66} mb={4} />
+                  <TodayTask></TodayTask>
+                </Box>
+                <Box
+                  flex={1}
+                  p={4}
+                  shadow="lg"
+                  rounded="lg"
+                  bg="white"
+                  borderWidth="1px"
+                  borderColor="brand.300"
+                >
+                  <Text
+                    mb={2}
+                    fontSize="lg"
+                    color="brand.700"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <MdWorkOutline size="1.25em" style={{ marginRight: 4 }} />
+                    Today's Tasks {today}
+                  </Text>
+                  <Box
+                    w={["100%", "48%"]}
+                    h={["auto", "200%"]}
+                    p={4}
+                    rounded="lg"
+                    bg="white"
+                    shadow="lg"
+                    mb={4}
+                  >
+                    <HStack mb={4}>
+                      <Icon as={MdSchool} fontSize="xl" />
+                      <Text fontSize="xl" fontWeight="bold">
+                        Current Learning Plan
+                      </Text>
+                    </HStack>
+                    {currentLearningPlan.map((item, index) => (
+                      <Flex key={index} mb={2} alignItems="center">
+                        <Text mr={4}>{item.topic}</Text>
+                        <CircularProgress
+                          value={item.percentCompleted}
+                          size="40px"
+                          color="blue.400"
+                        >
+                          <CircularProgressLabel>
+                            {item.percentCompleted}%
+                          </CircularProgressLabel>
+                        </CircularProgress>
+                      </Flex>
+                    ))}{" "}
+                  </Box>
+                  ;
+                </Box>
+              </VStack>
+              <Box
+                flex={3}
+                p={4}
+                shadow="lg"
+                rounded="lg"
+                bg="white"
+                borderWidth="1px"
+                borderColor="brand.300"
               >
-                {task.date} {task.day}
-              </Heading>
-            ) : null}
-            <Box
-              bg={colors.backgroundLight || "gray.50"}
-              shadow={shadows.md}
-              rounded={radii.md}
-              p={6}
-              mb={0}
-            >
-              <Text color={colors.text || "gray.600"} fontSize="md">
-                {task.topic}
-              </Text>
-            </Box>
-          </Box>
-        ))}
-      </VStack>
-    </Container>
+                <LearningEventsList></LearningEventsList>
+              </Box>
+            </HStack>
+          </VStack>
+        </Container>
+      </Box>
+    </ChakraProvider>
   );
-};
+}
 
-export default TaskList;
+export default Dashboard;

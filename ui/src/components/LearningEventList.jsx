@@ -17,6 +17,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { MdSchool, MdFilterList } from "react-icons/md";
+import { FaChalkboardTeacher } from "react-icons/fa";
+
 import { useNavigate } from "react-router-dom";
 const eventsData = [
   {
@@ -132,9 +134,16 @@ const LearningEventsList = () => {
   return (
     <VStack spacing={4} p={5}>
       <Flex w="full" justify="space-between" align="center">
-        <Heading as="h1" size="xl">
-          Your Classes
-        </Heading>
+        <Text
+          mb={2}
+          fontSize="2xl"
+          color="brand.700"
+          display="flex"
+          alignItems="center"
+        >
+          <FaChalkboardTeacher size="1.25em" style={{ marginRight: 4 }} />
+          Courses
+        </Text>
         <Box>
           <Button
             leftIcon={<MdFilterList />}

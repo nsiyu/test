@@ -1,18 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Box, VStack, Heading, Text, Container } from "@chakra-ui/react";
-import theme from "../../theme"; // Ensure this imports correctly to use its values
+import theme from "../../theme";
 
 const TaskList = () => {
-  const { colors, shadows, radii } = theme; // Using values directly from imported theme
-
-  // Function to format dates
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
+  const { colors, shadows, radii } = theme;
   const [calendarItems, setCalendarItems] = useState([]);
+
   useEffect(() => {
     const fetchCalendarItems = async () => {
       try {

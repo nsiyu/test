@@ -14,6 +14,8 @@ import ContentPage from "./components/ContentPage.jsx";
 import Flashcard from "./components/Flashcard.jsx";
 import UploadPage from "./components/UploadPage.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import Title from "./components/Title.jsx";
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -29,6 +31,7 @@ function App() {
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
           <Route path="/upload" element={<UploadPage />} />
+          <Route path="/title" element={<Title></Title>} />
           <Route index element={<Dashboard />} />
         </Routes>
       </AuthProvider>

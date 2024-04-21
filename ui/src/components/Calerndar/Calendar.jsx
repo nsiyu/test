@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { ChakraProvider, extendTheme, Box, Button, useColorModeValue } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  extendTheme,
+  Box,
+  Button,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import Schedule from "./Schedule.jsx";
 import TaskList from "./TaskList";
 import theme from "../../theme.js";
-
-
 
 export default function Calendar() {
   const [currentView, setCurrentView] = useState("Schedule");
