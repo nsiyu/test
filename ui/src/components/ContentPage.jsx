@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { FaGoogleDrive, FaUpload } from "react-icons/fa";
 import { MdCheckCircle } from "react-icons/md";
-import Upload from "./Upload.jsx";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -43,22 +42,42 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    fetch("http://localhost:3000/upload-pdf", {
-      method: "POST",
-      body: formData,
-      mode: "no-cors",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setExtractedText(data.text);
-        toast({
-          title: "File uploaded successfully",
-          description: "Text has been extracted from the PDF.",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
+    try {
+      fetch("http://localhost:3000/upload-pdf", {
+        method: "POST",
+        body: formData,
+        mode: "no-cors",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setExtractedText(data.text);
+          toast({
+            title: "File uploaded successfully",
+            description: "Text has been extracted from the PDF.",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          toast({
+            title: "Upload failed",
+            description: error.message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
         });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
       });
+    }
   };
 
   return (
@@ -86,7 +105,6 @@ function App() {
                   Upload PDF
                 </Button>
               </HStack>
-              {/* Displaying the extracted text */}
               {extractedText.length > 0 && (
                 <Box
                   overflowY="auto"
