@@ -35,6 +35,22 @@ const TodayTask = () => {
   const [uploadedVideos, setUploadedVideos] = useState({});
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleUpload = (eventId, link) => {
+    setIsLoading(true); // Start loading
+    setUploadedVideos((prevVideos) => ({
+      ...prevVideos,
+      [eventId]: link,
+    }));
+    setTimeout(() => {
+      // Simulate an upload delay
+      setIsOpen(false);
+      setVideoLink("");
+      setIsLoading(false); // Stop loading after upload is done
+    }, 4000); // Adjust time as per your actual upload time
+  };
+
   const monthMapping = {
     jan: "01",
     feb: "02",
@@ -74,15 +90,6 @@ const TodayTask = () => {
 
     fetchCalendarItems();
   }, []);
-
-  const handleUpload = (eventId, link) => {
-    setUploadedVideos((prevVideos) => ({
-      ...prevVideos,
-      [eventId]: link,
-    }));
-    setIsOpen(false);
-    setVideoLink("");
-  };
 
   const renderIcons = (eventId) => {
     if (uploadedVideos[eventId]) {
@@ -169,6 +176,8 @@ const TodayTask = () => {
               colorScheme="blue"
               mr={3}
               onClick={() => handleUpload(selectedEventId, videoLink)}
+              isLoading={isLoading}
+              loadingText="Uploading"
             >
               Upload
             </Button>
