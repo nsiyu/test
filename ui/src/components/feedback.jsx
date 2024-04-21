@@ -10,26 +10,31 @@ import {
   AccordionPanel,
   IconButton,
   useColorModeValue,
-  AspectRatio,
   Progress,
   Button,
   Center,
+  HStack,
 } from "@chakra-ui/react";
 import Confetti from "react-confetti";
 import { FaAngleDown, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import ReactPlayer from "react-player";
+
 const QuizFeedback = () => {
   const navigate = useNavigate();
+
   const quizData = [
     {
-      text: "What is the capital of France?",
+      question: "What is the capital of France?",
       correctAnswer: "Paris",
       explanation: "Paris is the capital of France.",
+      correct: "correct",
     },
     {
-      text: "Who wrote 'To Kill a Mockingbird'?",
+      question: "Who wrote 'To Kill a Mockingbird'?",
       correctAnswer: "Harper Lee",
       explanation: "Harper Lee wrote 'To Kill a Mockingbird'.",
+      correct: "no",
     },
   ];
 
@@ -83,16 +88,17 @@ const QuizFeedback = () => {
               <h2>
                 <AccordionButton onClick={() => toggleReview(index)}>
                   <Box flex="1" textAlign="left">
-                    {`Question ${index + 1}: ${question.text}`}
-                    {userAnswers[index] === question.correctAnswer ? (
+                    {`Question ${index + 1}: ${question.question}`}
+                    {question.correct === "correct" ? (
                       <Text color="green.500" ml={2}>
-                        {" "}
-                        (Right)
+                        Correct ✔
                       </Text>
                     ) : (
                       <Text color="red.500" ml={2}>
-                        {" "}
-                        (Wrong)
+                        Wrong{" "}
+                        <Text as="spin" fontWeight="black">
+                          X
+                        </Text>
                       </Text>
                     )}
                   </Box>
@@ -105,24 +111,32 @@ const QuizFeedback = () => {
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-                <Text>Your Answer: {userAnswers[index]}</Text>
-                <Text>Correct Answer: {question.correctAnswer}</Text>
-                {userAnswers[index] === question.correctAnswer ? (
-                  <Text color="green.500">Correct!</Text>
+                <Text color={question.correct == "correct" ? "green" : "red"}>
+                  Your Answer:{" "}
+                  <Text as="spin" color={"black"}>
+                    {userAnswers[index]}
+                  </Text>
+                </Text>
+                {question.correct == "correct" ? (
+                  <></>
+                ) : (
+                  <Text color={"green"}>
+                    Correct Answer:{" "}
+                    <Text as="spin">{question.correctAnswer}</Text>
+                  </Text>
+                )}
+
+                {question.correct == "correct" ? (
+                  <></>
                 ) : (
                   <>
                     <Text color="red.500">Wrong...</Text>
                     <Text>Explanation: {question.explanation}</Text>
-                    {/* Video Embed */}
-                    <AspectRatio ratio={16 / 9} mt={4}>
-                      <iframe
-                        title="Embedded Video"
-                        width="480" // Adjust the width as needed
-                        height="270" // Adjust the height as needed
-                        src="https://www.youtube.com/embed/hMMKo79SHFE"
-                        allowFullScreen
-                      ></iframe>
-                    </AspectRatio>
+                    <ReactPlayer
+                      url="https://storage.googleapis.com/klap-renders/f6b71095-2a6d-4d7a-8b42-336e204c8ee7-cea9f61f-309d-4274-a7db-945b6a2f3305.mp4"
+                      controls
+                      width={"40"}
+                    />
                   </>
                 )}
               </AccordionPanel>

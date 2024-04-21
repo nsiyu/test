@@ -15,32 +15,27 @@ const QuizPage = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
 
-  const [qquestions, setQuestion] = useState([]);
+  const [questions, setQuestion] = useState([]);
 
   useEffect(() => {
-    const fetchCalendarItems = async () => {
+    const fetchQuestions = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/get-calendar-items"
-        );
+        const response = await fetch("http://localhost:3000/questions");
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
-        setQuestion(data);
+        console.log(data);
+        // Assuming each object in the array has a 'value' key
+        const valueArray = data.map((item) => item.question);
+
+        setQuestion(valueArray);
+        console.log(valueArray);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
 
-    fetchCalendarItems();
+    fetchQuestions();
   }, []);
-
-  const questions = [
-    "Capital of France",
-    "Author of To Kill a Mockingbird",
-    "Boiling point of water in Celsius",
-    "Painter of the Mona Lisa",
-    "Chemical symbol for gold",
-  ];
 
   const handleAnswerChange = (question, answer) => {
     setAnswers((prevAnswers) => ({
@@ -51,7 +46,8 @@ const QuizPage = () => {
 
   const handleSubmit = () => {
     console.log("Answers:", answers);
-    navigate("/feedback");
+
+    navigate("/feedback", { state: { userAnswers: answers } });
     toast({
       title: "Quiz submitted",
       description: "Thank you for submitting your answers!",
@@ -83,7 +79,7 @@ const QuizPage = () => {
 const QuestionInput = ({ question, onChange }) => {
   return (
     <Box w="100%">
-      <Text>{question}</Text>
+      <Text mb={"0.3em"}>{question}</Text>
       <Input
         placeholder={`Enter your answer`}
         onChange={(e) => onChange(e.target.value)}
