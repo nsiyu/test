@@ -4,6 +4,7 @@ from gemini_app import setup_gemini_routes
 from pdf_app import setup_pdf_routes
 from shorts_app import setup_short_routes
 from autograde_app import setup_autograde_routes
+
 app = Flask(__name__)
 CORS(app)
 

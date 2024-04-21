@@ -8,6 +8,7 @@ from flask import request, jsonify
 
 AGENT_ADDRESS = "agent1q2p4shdx3ua25u73l26zdc36w4upax20vg7nqrsck3hqgqw7c46kv2e5z56"
 GEMINI_AGENT = 'agent1qwg20ukwk97t989h6kc8a3sev0lvaltxakmvvn3sqz9jdjw4wsuxqa45e8l'
+AGENT = "agent1q2t0vdlzteejr550xp38ddpys3h4p3r3atgh33z042c34vsp2nlt7d6l0dm"
 
 class AutoGradeRequest(Model):
     query: List[str] 
@@ -39,7 +40,7 @@ def setup_autograde_routes(app):
             
             questions = data['questions']
             formatted_questions = [f"{item['question']}|{item['answer']}" for item in questions if 'question' in item and 'answer' in item]
-            result = asyncio.run(make_agent_call(GEMINI_AGENT, AutoGradeRequest(query=formatted_questions)))
+            result = asyncio.run(make_agent_call(AGENT, AutoGradeRequest(query=formatted_questions)))
             return jsonify({"message": result}), 200
 
         except Exception as e:
