@@ -15,7 +15,9 @@ import Flashcard from "./components/Flashcard.jsx";
 import FileUploadPage from "./components/UploadPage.jsx";
 import Feedback from "./components/feedback";
 import UploadPage from "./components/UploadPage.jsx";
- 
+import Dashboard from "./components/Dashboard.jsx";
+import Title from "./components/Title.jsx";
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -33,7 +35,8 @@ function App() {
           <Route path="/" element={<ContentPage />}/>
           <Route path="/uploadpage" element={<FileUploadPage />} />
           <Route path="/upload" element={<UploadPage />} />
-          <Route index element={<></>} />
+          <Route path="/title" element={<Title></Title>} />
+          <Route index element={<Dashboard />} />
         </Routes>
       </AuthProvider>
     </ChakraProvider>
