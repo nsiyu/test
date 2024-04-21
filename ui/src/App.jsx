@@ -13,6 +13,7 @@ import Quiz from "./components/Quiz.jsx";
 import EducationForm from "./components/EducationPreference.jsx";
 import ContentPage from "./components/ContentPage.jsx";
 import Flashcard from "./components/Flashcard.jsx";
+import Feedback from "./components/feedback";
 
 function App() {
   return (
@@ -26,8 +27,8 @@ function App() {
           <Route path="/UserInfo" element={<EducationForm />} />
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
-          <Route path="/" element={<LearningEventsList />}>
-            <Route index element={<HomePage/>} />
+          <Route path="/" element={<Feedback/>}>
+            <Route index element={<Feedback/>} />
           </Route>
         </Routes>
       </AuthProvider>
