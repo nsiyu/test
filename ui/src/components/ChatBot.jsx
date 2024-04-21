@@ -13,7 +13,7 @@ function Chat() {
   // Initialize the messages state with a welcome message from the AI
   const [messages, setMessages] = useState([
     {
-      text: "Hi, I am your ai tutor, try to ask me anything about this lecture",
+      text: "Hi, I am your ai tutor, you can ask me anything about this lecture",
       sender: "ai",
     },
     {

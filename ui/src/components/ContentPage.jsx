@@ -1,28 +1,27 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
-  Input,
-  Text,
   VStack,
   Container,
-  Heading,
   Flex,
-  useToast,
+  Heading,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
 import { MdReplay, MdForward } from "react-icons/md";
 import ReactPlayer from "react-player";
-import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
-import Typing from "./Typing"; // Assuming Typing component is in a separate file
+import Flashcards from "./Flashcard";
+import Typing from "./Typing";
 import ChatBot from "./ChatBot.jsx";
 import { useNavigate } from "react-router-dom";
+
 function App() {
   const [showVideo, setShowVideo] = useState(true);
   const [showButtons, setShowButtons] = useState(false);
   const [showFlashcards, setShowFlashcards] = useState(false);
-  const toast = useToast();
   const [showNotes, setShowNotes] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleVideoEnd = () => {
@@ -36,24 +35,18 @@ function App() {
     setShowFlashcards(false);
   };
 
-  const handleMoveOn = () => {
-    navigate("/quizpage");
-  };
-
-  // Aspect ratio of the video (16:9)
-  const videoAspectRatio = 16 / 9;
-
   return (
     <Container maxW="container.xl" p={4}>
-      <Flex direction="column">
-        <Flex>
-          <VStack w="50%" spacing={8}>
+      <Flex direction="column" gap={6}>
+        <Flex justify="space-between" align="center">
+          <Box flex="1" p={2}>
             {showVideo && (
               <Box
-                width="100%/3"
-                maxWidth={`${videoAspectRatio * 500}px`} // Adjusted width based on aspect ratio
-                maxHeight="600px"
+                width="100%"
+                maxW="400px" // Further reduced maximum width
+                borderRadius="lg"
                 overflow="hidden"
+                boxShadow="lg"
               >
                 <ReactPlayer
                   url="https://storage.googleapis.com/klap-renders/f6b71095-2a6d-4d7a-8b42-336e204c8ee7-cea9f61f-309d-4274-a7db-945b6a2f3305.mp4"
@@ -61,51 +54,50 @@ function App() {
                   height="100%"
                   controls
                   onEnded={handleVideoEnd}
+                  style={{ borderRadius: "8px" }}
                 />
               </Box>
             )}
-            {showFlashcards && <Flashcards />}
             {showButtons && (
-              <Flex w="full" justify="center" spacing={4}>
+              <HStack justify="center" spacing={4} mt={4}>
                 <Button
                   onClick={handleReplay}
                   colorScheme="blue"
-                  variant="ghost"
-                  aria-label="Replay"
+                  variant="outline"
+                  leftIcon={<MdReplay size={24} />}
                 >
-                  <MdReplay size={32} />
+                  Replay
                 </Button>
                 <Button
-                  onClick={handleMoveOn}
+                  onClick={() => {
+                    navigate("/quizpage");
+                  }}
                   colorScheme="blue"
-                  variant="ghost"
-                  aria-label="Move On"
+                  variant="outline"
+                  leftIcon={<MdForward size={24} />}
                 >
-                  <MdForward size={32} />
+                  Next
                 </Button>
-              </Flex>
-            )}
-          </VStack>
-          <HStack w="40%" spacing={8} align="stretch" justify={"end"}>
-            <ChatBot></ChatBot>
-          </HStack>
-        </Flex>
-        {/* Notes with typing */}
-        <VStack w="100%" align="stretch" mt={"2em"}>
-          <Box p={4} borderWidth="1px" borderRadius="lg" w="90%">
-            <Button onClick={() => setShowNotes(!showNotes)}>Show Notes</Button>
-            {showNotes && (
-              <VStack w="100%" align="stretch">
-                <Box p={4} borderWidth="1px" borderRadius="lg" w="90%">
-                  <Heading as="h3" size="md" mb={2}>
-                    Notes
-                  </Heading>
-                  <Typing />
-                </Box>
-              </VStack>
+              </HStack>
             )}
           </Box>
-        </VStack>
+          <Box flex="1" p={2}>
+            <ChatBot />
+          </Box>
+        </Flex>
+        <Box w="100%" borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
+          <Button onClick={() => setShowNotes(!showNotes)}>
+            {showNotes ? "Hide Notes" : "Show Notes"}
+          </Button>
+          {showNotes && (
+            <VStack mt={4} align="stretch">
+              <Heading as="h3" size="md" mb={2}>
+                Notes
+              </Heading>
+              <Typing />
+            </VStack>
+          )}
+        </Box>
       </Flex>
     </Container>
   );
