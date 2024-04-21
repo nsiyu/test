@@ -7,76 +7,19 @@ import {
   VStack,
   Container,
   Heading,
-  SimpleGrid,
-  Progress,
-  List,
-  ListItem,
-  ListIcon,
   Flex,
   useToast,
-  AspectRatio,
 } from "@chakra-ui/react";
-import { FaGoogleDrive, FaUpload } from "react-icons/fa";
-import { MdCheckCircle, MdReplay, MdForward } from "react-icons/md";
+import { MdReplay, MdForward } from "react-icons/md";
 import ReactPlayer from "react-player";
 import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
+import Typing from "./Typing"; // Assuming Typing component is in a separate file
 
 function App() {
-  const [file, setFile] = useState(null);
   const [showVideo, setShowVideo] = useState(true);
   const [showButtons, setShowButtons] = useState(false);
   const [showFlashcards, setShowFlashcards] = useState(false);
   const toast = useToast();
-  const fileInputRef = useRef(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    setFile(file);
-    // Optionally trigger the upload function immediately after file selection
-    // handleFileUpload(file);
-  };
-
-  const handleFileUpload = async () => {
-    if (!file) {
-      toast({
-        title: "No file selected",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Assuming you have a server ready to receive the file at this endpoint
-    // Adjust the URL to your needs
-    fetch("http://localhost:3000/upload", {
-      method: "POST",
-      body: formData,
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      toast({
-        title: "File uploaded successfully",
-        description: "Text has been extracted from the PDF.",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
-    })
-    .catch((error) => {
-      toast({
-        title: "Upload failed",
-        description: "Unable to upload file.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-    });
-  };
 
   const handleVideoEnd = () => {
     setShowVideo(false);
@@ -90,96 +33,115 @@ function App() {
   };
 
   const handleMoveOn = () => {
-    setShowFlashcards(true);
-    setShowButtons(false);
-    setShowVideo(false);
+    // Redirect the user to the quiz page
   };
+
+  // Aspect ratio of the video (16:9)
+  const videoAspectRatio = 16 / 9;
 
   return (
     <Container maxW="container.xl" p={4}>
-      <Flex>
-        <VStack w="80%" spacing={8}>
-          {showVideo && (
-            <AspectRatio ratio={16 / 9} w="full">
-              <ReactPlayer
-                url="https://www.youtube.com/watch?v=xuP4g7IDgDM&ab_channel=NatureBlogs"
-                width="100%"
-                height="500px"
-                onEnded={handleVideoEnd}
-              />
-            </AspectRatio>
-          )}
-          {showFlashcards && <Flashcards />}
-          {showButtons && (
-            <Flex w="full" justify="center">
-              <Button
-                onClick={handleReplay}
-                colorScheme="blue"
-                variant="ghost"
-                size="lg"
-                aria-label="Replay"
-                mr={4}
+      <Flex direction="column">
+        <Flex>
+          <VStack w="50%" spacing={8}>
+            {showVideo && (
+              <Box
+                width="100%/3"
+                maxWidth={`${videoAspectRatio * 500}px`} // Adjusted width based on aspect ratio
+                maxHeight="600px"
+                overflow="hidden"
               >
-                <MdReplay size={32} />
-              </Button>
-              <Button
-                onClick={handleMoveOn}
-                colorScheme="blue"
-                variant="ghost"
-                size="lg"
-                aria-label="Move On"
+                <ReactPlayer
+                  url="https://storage.googleapis.com/klap-renders/f6b71095-2a6d-4d7a-8b42-336e204c8ee7-cea9f61f-309d-4274-a7db-945b6a2f3305.mp4"
+                  width="100%"
+                  height="100%"
+                  controls
+                  onEnded={handleVideoEnd}
+                />
+              </Box>
+            )}
+            {showFlashcards && <Flashcards />}
+            {showButtons && (
+              <Flex w="full" justify="center" spacing={4}>
+                <Button
+                  onClick={handleReplay}
+                  colorScheme="blue"
+                  variant="ghost"
+                  aria-label="Replay"
+                >
+                  <MdReplay size={32} />
+                </Button>
+                <Button
+                  onClick={handleMoveOn}
+                  colorScheme="blue"
+                  variant="ghost"
+                  aria-label="Move On"
+                >
+                  <MdForward size={32} />
+                </Button>
+              </Flex>
+            )}
+          </VStack>
+          <VStack w="50%" spacing={8} align="stretch">
+            {/* Chat box */}
+            <Box p={4} borderWidth="1px" borderRadius="lg" w="90%" h="600px" position="relative">
+              <Heading as="h3" size="md">
+                AI Chat
+              </Heading>
+              {/* Placeholder text bubbles */}
+              <VStack
+                spacing={4}
+                align="stretch"
+                h="calc(100% - 60px)" // Adjusted height to accommodate the input and button
+                justifyContent="space-between"
               >
-                <MdForward size={32} />
-              </Button>
-            </Flex>
-          )}
-        </VStack>
-        <VStack w="20%" spacing={8} align="stretch">
-          {/* Chat box */}
-         <Box p={4} borderWidth="1px" borderRadius="lg" w="full" h="500px">
-  <Heading as="h3" size="md">
-    AI Chat
-  </Heading>
-  <VStack spacing={4} align="stretch" h="100%" justifyContent="space-between">
-    {/* Placeholder text bubbles */}
-    <Box alignSelf="flex-start" p={2} bg="blue.200" borderRadius="lg" maxW="70%">
-      <Text>Chungus mccrispy</Text>
-    </Box>
-    <Box alignSelf="flex-end" p={2} bg="green.200" borderRadius="lg" maxW="70%">
-      <Text>delux</Text>
-    </Box>
-    {/* Input text box */}
-    <Box mb={-120}>
-      <Input placeholder="Type your message" />
-    </Box>
-    {/* Send button */}
-    <Button size="sm" colorScheme="blue" mb={4}>Send</Button>
-  </VStack>
-</Box>
-
+                <Box
+                  alignSelf="flex-start"
+                  p={2}
+                  bg="blue.200"
+                  borderRadius="lg"
+                  maxW="70%"
+                >
+                  <Text>Chungus mccrispy</Text>
+                </Box>
+                <Box
+                  alignSelf="flex-end"
+                  p={2}
+                  bg="green.200"
+                  borderRadius="lg"
+                  maxW="70%"
+                >
+                  <Text>delux</Text>
+                </Box>
+              </VStack>
+              <Flex
+                position="absolute"
+                bottom="0"
+                left="0"
+                right="0"
+                align="center"
+                justify="space-between"
+                p={2}
+              >
+                <Input placeholder="Type your message" />
+                <Button size="sm" colorScheme="blue">
+                  Upload
+                </Button>
+              </Flex>
+            </Box>
+          </VStack>
+        </Flex>
+        {/* Notes with typing */}
+        <VStack w="100%" align="stretch">
+          <Box p={4} borderWidth="1px" borderRadius="lg" w="90%">
+            <Heading as="h3" size="md" mb={2}>
+              Notes
+            </Heading>
+            <Typing />
+          </Box>
         </VStack>
       </Flex>
     </Container>
-  );
-}
-
-function FeatureBox({ icon, title, onClick }) {
-  return (
-    <Button
-      p={4}
-      borderWidth="1px"
-      borderRadius="lg"
-      w="full"
-      h="100px" // Making these smaller as per your earlier request
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      onClick={onClick}
-    >
-      <Text fontSize="xl">{icon}</Text>
-      <Text>{title}</Text>
-    </Button>
   );
 }
 
