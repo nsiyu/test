@@ -9,12 +9,13 @@ import {
   Heading,
   Flex,
   useToast,
+  HStack,
 } from "@chakra-ui/react";
 import { MdReplay, MdForward } from "react-icons/md";
 import ReactPlayer from "react-player";
 import Flashcards from "./Flashcard"; // Assuming Flashcards component is in a separate file
 import Typing from "./Typing"; // Assuming Typing component is in a separate file
-
+import ChatBot from "./ChatBot.jsx";
 function App() {
   const [showVideo, setShowVideo] = useState(true);
   const [showButtons, setShowButtons] = useState(false);
@@ -82,54 +83,9 @@ function App() {
               </Flex>
             )}
           </VStack>
-          <VStack w="50%" spacing={8} align="stretch">
-            {/* Chat box */}
-            <Box p={4} borderWidth="1px" borderRadius="lg" w="90%" h="600px" position="relative">
-              <Heading as="h3" size="md">
-                AI Chat
-              </Heading>
-              {/* Placeholder text bubbles */}
-              <VStack
-                spacing={4}
-                align="stretch"
-                h="calc(100% - 60px)" // Adjusted height to accommodate the input and button
-                justifyContent="space-between"
-              >
-                <Box
-                  alignSelf="flex-start"
-                  p={2}
-                  bg="blue.200"
-                  borderRadius="lg"
-                  maxW="70%"
-                >
-                  <Text>Chungus mccrispy</Text>
-                </Box>
-                <Box
-                  alignSelf="flex-end"
-                  p={2}
-                  bg="green.200"
-                  borderRadius="lg"
-                  maxW="70%"
-                >
-                  <Text>delux</Text>
-                </Box>
-              </VStack>
-              <Flex
-                position="absolute"
-                bottom="0"
-                left="0"
-                right="0"
-                align="center"
-                justify="space-between"
-                p={2}
-              >
-                <Input placeholder="Type your message" />
-                <Button size="sm" colorScheme="blue">
-                  Upload
-                </Button>
-              </Flex>
-            </Box>
-          </VStack>
+          <HStack w="40%" spacing={8} align="stretch" justify={"end"}>
+            <ChatBot></ChatBot>
+          </HStack>
         </Flex>
         {/* Notes with typing */}
         <VStack w="100%" align="stretch">

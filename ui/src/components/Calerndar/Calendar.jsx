@@ -15,6 +15,8 @@ export default function Calendar() {
   const buttonBgColor = useColorModeValue("buttonActive", "buttonInactive");
   const bgColor = useColorModeValue("bgLight", "gray.800");
 
+
+  
   return (
     <ChakraProvider theme={theme}>
       <Box bg={bgColor} color="gray.800" p={5} minH="100vh">
