@@ -23,7 +23,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/flashcard" element={<Flashcard />} />
           <Route path="/quiz" element={<Quiz />} />
+          <Route path="/contentPage" element={<ContentPage />} />
+
           <Route path="/UserInfo" element={<EducationForm />} />
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
