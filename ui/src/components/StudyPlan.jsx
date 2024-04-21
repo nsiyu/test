@@ -67,7 +67,6 @@ const StudyPlan = () => {
     }));
 
   const tasks = convertFetchedDataToTasks(calendarItems);
-  console.log(tasks);
   useEffect(() => {
     const fetchCalendarItems = async () => {
       try {

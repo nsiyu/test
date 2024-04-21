@@ -33,11 +33,11 @@ const currentLearningPlan = [
   { topic: "Spaced Repetition", percentCompleted: 25 },
   { topic: "Active Recall", percentCompleted: 35 },
   { topic: "Chunking", percentCompleted: 20 },
-  { topic: "Visualization", percentCompleted: 20 },
+  { topic: "Feedback", percentCompleted: 20 },
 ];
 const PieChart = () => {
   return (
-    <Flex mt={8} flexWrap="wrap" justifyContent="space-between" >
+    <Flex mt={8} flexWrap="wrap" justifyContent="space-between">
       <Box h={["auto", "200%"]} p={4} rounded="lg" bg="white" mb={4}>
         <HStack mb={4}>
           <Icon as={MdSchool} fontSize="xl" />

@@ -55,7 +55,10 @@ const Navbar = () => {
         onClick={() => navigate("/")}
         _hover={{ cursor: "pointer" }}
       >
-        Learn.ai
+        Learn.
+        <Text as="spin" color={"#ff8a8a"}>
+          ai
+        </Text>
       </Box>
 
       <Flex align="center">
