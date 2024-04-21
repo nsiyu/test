@@ -12,8 +12,10 @@ import Quiz from "./components/Quiz.jsx";
 import EducationForm from "./components/EducationPreference.jsx";
 import ContentPage from "./components/ContentPage.jsx";
 import Flashcard from "./components/Flashcard.jsx";
+import FileUploadPage from "./components/UploadPage.jsx";
+import Feedback from "./components/feedback";
 import UploadPage from "./components/UploadPage.jsx";
-
+ 
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -28,6 +30,8 @@ function App() {
           <Route path="/UserInfo" element={<EducationForm />} />
           <Route path="/Courses" element={<LearningEventsList />} />
           <Route path="/studyplan" element={<StudyPlan />} />
+          <Route path="/" element={<ContentPage />}/>
+          <Route path="/uploadpage" element={<FileUploadPage />} />
           <Route path="/upload" element={<UploadPage />} />
           <Route index element={<></>} />
         </Routes>
