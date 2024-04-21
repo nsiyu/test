@@ -5,6 +5,7 @@ from uagents import Model
 import json
 import asyncio
 from database import get_db
+
 AGENT_ADDRESS = "agent1qwg20ukwk97t989h6kc8a3sev0lvaltxakmvvn3sqz9jdjw4wsuxqa45e8l"
 
 class PdfRequest(Model):
@@ -44,7 +45,6 @@ def setup_pdf_routes(app):
 
                 result = asyncio.run(make_agent_call(req))
                 for item in result.split(',')[1:]:
-                    print(item)
                     cur = item.split('-')
                     date = cur[0]
                     day = cur[1]
