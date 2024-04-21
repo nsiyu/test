@@ -15,11 +15,23 @@ class PdfRequest(Model):
 class PdfResponse(Model):
     text: str 
 
+class QuizRequest(Model):
+    query: str 
+ 
+class QuizResponse(Model):
+    text: str 
+
+class AutoGradeGeminiRequest(Model):
+    query: str
+
+class AutoGradeResponse(Model):
+    text: str 
+
 Gemini_agent = Agent(
     name="Gemini Agent",
-    port=8001,
+    port=8020,
     seed="Gemini Agent secret phrase",
-    endpoint=["http://localhost:8001/submit"],
+    endpoint=["http://localhost:8020/submit"],
 )
  
 fund_agent_if_low(Gemini_agent.wallet.address())
@@ -39,7 +51,7 @@ async def handle_message(message):
     for chunk in response:
         full_response_text += chunk.text
         
-    message = "Gemini: " + full_response_text
+    message = full_response_text
     return message
         
 @Gemini_agent.on_event('startup')
@@ -57,6 +69,18 @@ async def handle_query_response(ctx: Context, sender: str, _query: PdfRequest):
     message = await handle_message(_query.query)
     ctx.logger.info(message)
     await ctx.send(sender, PdfResponse(text=message))
+
+@Gemini_agent.on_query(model=QuizRequest, replies={QuizResponse})
+async def handle_query_response(ctx: Context, sender: str, _query: QuizRequest):
+    message = await handle_message(_query.query)
+    ctx.logger.info(message)
+    await ctx.send(sender, QuizResponse(text=message))
+
+@Gemini_agent.on_query(model=AutoGradeGeminiRequest, replies={AutoGradeResponse})
+async def handle_query_response(ctx: Context, sender: str, _query: AutoGradeGeminiRequest):
+    message = await handle_message(_query.query)
+    ctx.logger.info(message)
+    await ctx.send(sender, AutoGradeResponse(text=message))    
 
 if __name__ == "__main__":
     Gemini_agent.run()

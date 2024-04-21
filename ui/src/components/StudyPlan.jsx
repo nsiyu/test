@@ -22,9 +22,17 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import { FaRobot, FaQuestionCircle, FaMoon, FaSun, FaUpload, FaPlay } from "react-icons/fa";
+import {
+  FaRobot,
+  FaQuestionCircle,
+  FaMoon,
+  FaSun,
+  FaUpload,
+  FaPlay,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
+import axios from "axios";
 
 const StudyPlan = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -50,17 +58,29 @@ const StudyPlan = () => {
   const [uploadedVideos, setUploadedVideos] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTopicId, setSelectedTopicId] = useState(null);
-  const [videoLink, setVideoLink] = useState('');
+  const [videoLink, setVideoLink] = useState("");
 
-  const handleUpload = (topicId, link) => {
-    setUploadedVideos((prevVideos) => ({
-      ...prevVideos,
-      [topicId]: link,
-    }));
-    setIsOpen(false);
-    setVideoLink('');
+  const handleUpload = async (topicId, link) => {
+    if (link) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/generate-short",
+          {
+            source_video_url: link,
+          }
+        );
+        console.log("API Response:", response.data);
+        setUploadedVideos((prevVideos) => ({
+          ...prevVideos,
+          [topicId]: link,
+        }));
+        setIsOpen(false);
+        setVideoLink("");
+      } catch (error) {
+        console.error("API Call Failed:", error);
+      }
+    }
   };
-
   const renderIcons = (topicId) => {
     if (uploadedVideos[topicId]) {
       // Show play icon if video is uploaded
@@ -143,9 +163,7 @@ const StudyPlan = () => {
             </Text>
             <Text fontSize="sm">Expected time: {topic.finishTime}</Text>
           </VStack>
-          <HStack spacing={2}>
-            {renderIcons(topic.id)}
-          </HStack>
+          <HStack spacing={2}>{renderIcons(topic.id)}</HStack>
         </Box>
       ))}
       {/* Video Upload Modal */}
@@ -165,10 +183,16 @@ const StudyPlan = () => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => handleUpload(selectedTopicId, videoLink)}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => handleUpload(selectedTopicId, videoLink)}
+            >
               Upload
             </Button>
-            <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button variant="ghost" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
